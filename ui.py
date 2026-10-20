@@ -241,58 +241,302 @@ input[type="text"]:focus, textarea:focus {
     box-shadow: 0 0 0 3px var(--primary-glow) !important;
 }
 
-/* ---------- Sidebar Branding & Live Indicator ---------- */
+/* ---------- Creative Sidebar Styling & Atmosphere ---------- */
 [data-testid="stSidebar"] {
-    background: #ffffff;
-    border-right: 1px solid var(--line);
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 40%, #f1f5f9 100%) !important;
+    border-right: 1px solid #e2e8f0 !important;
+    box-shadow: 4px 0 24px rgba(15, 23, 42, 0.05) !important;
+    position: relative !important;
 }
+
+[data-testid="stSidebar"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.14) 0%, rgba(236, 72, 153, 0.05) 60%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+[data-testid="stSidebarContent"] {
+    padding-top: 1.2rem !important;
+    padding-bottom: 2rem !important;
+}
+
+/* Sidebar Nav Wrapper */
+[data-testid="stSidebarNav"] {
+    margin-bottom: 14px !important;
+}
+
+/* Grouped Section Headers */
+[data-testid="stSidebarNav"] span[data-testid*="stSidebarNavSectionHeader"],
+[data-testid="stSidebarNav"] div > span[data-testid],
+[data-testid="stSidebarNav"] [data-testid*="section"],
+[data-testid="stSidebarNav"] > ul > div > span {
+    font-family: var(--display) !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: #64748b !important;
+    padding: 12px 14px 6px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+[data-testid="stSidebarNavSeparator"] {
+    border-top: 1px dashed #cbd5e1 !important;
+    margin: 8px 8px !important;
+}
+
+/* Sidebar Nav Items Container */
+[data-testid="stSidebarNavItems"] {
+    padding: 4px 8px !important;
+    gap: 5px !important;
+}
+
+[data-testid="stSidebarNavLinkContainer"] {
+    margin: 3px 0 !important;
+}
+
+/* Individual Link Button Card */
+[data-testid="stSidebarNavLink"] {
+    display: flex !important;
+    align-items: center !important;
+    padding: 9px 14px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(226, 232, 240, 0.85) !important;
+    background: #ffffff !important;
+    color: #334155 !important;
+    font-weight: 600 !important;
+    font-size: 0.92rem !important;
+    letter-spacing: -0.01em !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    text-decoration: none !important;
+}
+
+/* Hover State: Slide right with purple glow */
+[data-testid="stSidebarNavLink"]:hover {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+    color: #4f46e5 !important;
+    border-color: #c7d2fe !important;
+    transform: translateX(4px) !important;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.14), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+}
+
+/* Active State: Radiant SaaS Gradient Pill with Luminous Glow */
+[data-testid="stSidebarNavLink"][aria-current="page"] {
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #4338ca 100%) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 8px 18px -2px rgba(79, 70, 229, 0.45), 0 2px 6px rgba(79, 70, 229, 0.25) !important;
+    transform: translateX(4px) scale(1.01) !important;
+}
+
+/* Glowing Left Cyan Indicator on Active Page */
+[data-testid="stSidebarNavLink"][aria-current="page"]::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 18% !important;
+    bottom: 18% !important;
+    width: 4px !important;
+    border-radius: 0 4px 4px 0 !important;
+    background: #67e8f9 !important;
+    box-shadow: 0 0 10px #22d3ee !important;
+}
+
+/* Active item text stays crisp white */
+[data-testid="stSidebarNavLink"][aria-current="page"] span,
+[data-testid="stSidebarNavLink"][aria-current="page"] p,
+[data-testid="stSidebarNavLink"][aria-current="page"] div {
+    color: #ffffff !important;
+}
+
+/* Icon Squircle Box */
+[data-testid="stSidebarNavLink"] span:first-child {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 8px !important;
+    font-size: 1.12rem !important;
+    margin-right: 10px !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    flex-shrink: 0 !important;
+}
+
+[data-testid="stSidebarNavLink"]:hover span:first-child {
+    transform: scale(1.18) rotate(-6deg) !important;
+    background: #e0e7ff !important;
+    border-color: #c7d2fe !important;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25) !important;
+}
+
+[data-testid="stSidebarNavLink"][aria-current="page"] span:first-child {
+    background: rgba(255, 255, 255, 0.22) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+    transform: scale(1.08) !important;
+}
+
+/* Creative Badges on Navigation Links */
+@keyframes badgeShimmer {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+[data-testid="stSidebarNavLink"][href*="ats-checker"]::after {
+    content: "AUDIT ⚡" !important;
+    margin-left: auto !important;
+    font-size: 0.62rem !important;
+    font-weight: 800 !important;
+    padding: 2px 7px !important;
+    border-radius: 9999px !important;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: #ffffff !important;
+    letter-spacing: 0.04em !important;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35) !important;
+    animation: badgeShimmer 2.2s infinite ease-in-out !important;
+}
+
+[data-testid="stSidebarNavLink"][href*="analyzer"]::after {
+    content: "POPULAR 🔥" !important;
+    margin-left: auto !important;
+    font-size: 0.62rem !important;
+    font-weight: 800 !important;
+    padding: 2px 7px !important;
+    border-radius: 9999px !important;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    color: #ffffff !important;
+    letter-spacing: 0.04em !important;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.35) !important;
+}
+
+[data-testid="stSidebarNavLink"][href*="ai-coach"]::after {
+    content: "AI 🤖" !important;
+    margin-left: auto !important;
+    font-size: 0.62rem !important;
+    font-weight: 800 !important;
+    padding: 2px 7px !important;
+    border-radius: 9999px !important;
+    background: linear-gradient(135deg, #ec4899 0%, #be185d 100%) !important;
+    color: #ffffff !important;
+    letter-spacing: 0.04em !important;
+    box-shadow: 0 2px 6px rgba(236, 72, 153, 0.35) !important;
+}
+
+/* Active Page Badge Adjustment */
+[data-testid="stSidebarNavLink"][aria-current="page"]::after {
+    background: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+    box-shadow: none !important;
+    animation: none !important;
+}
+
+/* ---------- Creative Sidebar Brand Card & Widgets ---------- */
 .brand-container {
-    padding: 6px 0 14px;
+    padding: 6px 0 12px;
 }
 .brand-header {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
+}
+.brand-logo-wrap {
+    position: relative;
+    width: 44px;
+    height: 44px;
 }
 .brand-logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
-    background: var(--primary-gradient);
-    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+    border-radius: 13px;
     color: white;
     font-size: 1.35rem;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+    position: relative;
+    z-index: 2;
+}
+.brand-logo-ping {
+    position: absolute;
+    inset: -3px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #4f46e5, #ec4899);
+    opacity: 0.4;
+    filter: blur(5px);
+    animation: pingSlow 3.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+    z-index: 1;
+}
+@keyframes pingSlow {
+    0%, 100% { transform: scale(0.96); opacity: 0.3; }
+    50% { transform: scale(1.1); opacity: 0.65; }
+}
+.brand-title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 .brand-text {
     font-family: var(--display);
     font-weight: 800;
-    font-size: 1.4rem;
-    background: var(--primary-gradient);
+    font-size: 1.35rem;
+    background: linear-gradient(135deg, #0f172a 0%, #4338ca 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: -0.025em;
     line-height: 1.1;
 }
+.brand-pill-ai {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+    color: white;
+    border-radius: 9999px;
+    letter-spacing: 0.05em;
+    box-shadow: 0 2px 6px rgba(236, 72, 153, 0.35);
+}
 .brand-sub {
     color: var(--muted);
-    font-size: 0.85rem;
-    line-height: 1.4;
-    margin-top: 4px;
+    font-size: 0.82rem;
+    line-height: 1.35;
+    margin-top: 3px;
 }
+
+/* Sidebar Status Card */
 .sidebar-status-card {
-    background: var(--canvas);
+    background: #ffffff;
     border: 1px solid var(--line);
     border-radius: var(--radius-md);
-    padding: 10px 14px;
+    padding: 12px 14px;
     margin: 12px 0 10px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    box-shadow: var(--shadow-xs);
+    gap: 12px;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.sidebar-status-card:hover {
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
 }
 .status-indicator {
     width: 10px;
@@ -303,16 +547,18 @@ input[type="text"]:focus, textarea:focus {
 .status-indicator.active {
     background: var(--green-strong);
     box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
+    animation: radarPulseRing 2s infinite;
 }
 .status-indicator.idle {
-    background: var(--subtle);
+    background: var(--yellow-strong);
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
 }
 .sidebar-status-info {
     overflow: hidden;
     line-height: 1.3;
 }
 .sidebar-status-title {
-    font-size: 0.84rem;
+    font-size: 0.86rem;
     font-weight: 700;
     color: var(--ink);
     white-space: nowrap;
@@ -322,6 +568,52 @@ input[type="text"]:focus, textarea:focus {
 .sidebar-status-sub {
     font-size: 0.75rem;
     color: var(--muted);
+    margin-top: 1px;
+}
+
+/* Creative Sidebar Tip Widget */
+.sidebar-tip-card {
+    background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
+    border: 1px solid #c7d2fe;
+    border-radius: 12px;
+    padding: 11px 13px;
+    margin: 12px 0 10px 0;
+    box-shadow: 0 2px 6px rgba(79, 70, 229, 0.05);
+}
+.sidebar-tip-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #4338ca;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+}
+.sidebar-tip-body {
+    font-size: 0.78rem;
+    color: #475569;
+    line-height: 1.4;
+}
+
+/* System Health Footer Bar */
+.sidebar-health-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.74rem;
+    color: #64748b;
+    font-weight: 600;
+    margin-top: 8px;
+    padding: 6px 4px;
+}
+.health-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    display: inline-block;
+    box-shadow: 0 0 6px #10b981;
 }
 
 /* ---------- Page Header (Hero) ---------- */

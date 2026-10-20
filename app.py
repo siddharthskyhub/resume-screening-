@@ -10,25 +10,37 @@ st.set_page_config(
 )
 ui.inject_css()
 
-pages = [
-    st.Page("views/home_page.py", title="Home", icon="🏠", default=True),
-    st.Page("views/analyzer_page.py", title="Resume Analyzer", icon="🎯", url_path="analyzer"),
-    st.Page("views/ats_checker_page.py", title="ATS Checker", icon="✅", url_path="ats-checker"),
-    st.Page("views/skill_gaps_page.py", title="Skill Gaps", icon="🧭", url_path="skill-gaps"),
-    st.Page("views/tracker_page.py", title="Job Tracker", icon="📋", url_path="tracker"),
-    st.Page("views/roadmap_page.py", title="Learning Roadmap", icon="🗺️", url_path="roadmap"),
-    st.Page("views/ai_coach_page.py", title="AI Coach", icon="🤖", url_path="ai-coach"),
-]
+pages = {
+    "OVERVIEW": [
+        st.Page("views/home_page.py", title="Home", icon="🏠", default=True),
+    ],
+    "CORE AUDIT": [
+        st.Page("views/analyzer_page.py", title="Resume Analyzer", icon="🎯", url_path="analyzer"),
+        st.Page("views/ats_checker_page.py", title="ATS Checker", icon="⚡", url_path="ats-checker"),
+        st.Page("views/skill_gaps_page.py", title="Skill Gaps", icon="🧭", url_path="skill-gaps"),
+    ],
+    "CAREER STRATEGY": [
+        st.Page("views/tracker_page.py", title="Job Tracker", icon="📋", url_path="tracker"),
+        st.Page("views/roadmap_page.py", title="Learning Roadmap", icon="🗺️", url_path="roadmap"),
+        st.Page("views/ai_coach_page.py", title="AI Coach", icon="🤖", url_path="ai-coach"),
+    ],
+}
 navigation = st.navigation(pages)
 
 with st.sidebar:
     st.markdown(
         '<div class="brand-container">'
         '<div class="brand-header">'
+        '<div class="brand-logo-wrap">'
         '<div class="brand-logo">🎯</div>'
+        '<div class="brand-logo-ping"></div>'
+        '</div>'
         '<div>'
-        '<div class="brand-text">SkillMatch AI</div>'
-        '<div class="brand-sub">Career & Skill Analytics Platform</div>'
+        '<div class="brand-title-row">'
+        '<span class="brand-text">SkillMatch</span>'
+        '<span class="brand-pill-ai">AI PRO</span>'
+        '</div>'
+        '<div class="brand-sub">Career &amp; Skill Intelligence</div>'
         '</div>'
         '</div>'
         '</div>',
@@ -55,15 +67,35 @@ with st.sidebar:
             '<div class="sidebar-status-card">'
             '<div class="status-indicator idle"></div>'
             '<div class="sidebar-status-info">'
-            '<div class="sidebar-status-title">No resume loaded</div>'
-            '<div class="sidebar-status-sub">Upload or use 1-click sample</div>'
+            '<div class="sidebar-status-title">No Resume Loaded</div>'
+            '<div class="sidebar-status-sub">Ready for 1-click sample</div>'
             '</div>'
             '</div>',
             unsafe_allow_html=True,
         )
+        if st.button("✨ Load 1-Click Sample", key="sb_btn_sample", use_container_width=True):
+            ui.load_sample_data()
+            st.rerun()
 
-    st.caption("🔒 Resumes are parsed in private session memory and never saved to databases.")
-    st.caption("✨ Portfolio Project by Siddharth Kumar")
+    st.markdown(
+        '<div class="sidebar-tip-card">'
+        '<div class="sidebar-tip-head">'
+        '<span>💡</span><b>ATS INSIDER TIP</b>'
+        '</div>'
+        '<div class="sidebar-tip-body">'
+        'Applicant Tracking Systems favor single-column layouts and quantifiable project achievements.'
+        '</div>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        '<div class="sidebar-health-bar">'
+        '<span class="health-dot"></span>'
+        '<span>Privacy Engine: 100% Client-Side</span>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
 
 navigation.run()
 
