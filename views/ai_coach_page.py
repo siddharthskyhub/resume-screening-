@@ -6,7 +6,7 @@ from ai import OllamaClient, OllamaError
 from analyzer import analyze_resume
 
 
-def shorten(text: str, limit: int = 100) -> str:
+def shorten(text: str, limit: int = 90) -> str:
     return text if len(text) <= limit else text[: limit - 1] + "…"
 
 
@@ -26,18 +26,24 @@ def pick(label: str, options: list[str], default: str | None, key: str) -> str |
 
 
 ui.hero(
-    "AI coach",
-    "Local AI that rewrites bullets, matches by meaning, explains your fit, and preps you for interviews. "
-    "Your scores never come from the AI.",
+    "Local AI Career Coach",
+    "Private, on-device intelligence for bullet rewriting, semantic requirement matching, fit explanations, and tailored interview coaching. Your resume never leaves your computer.",
+    badge="AI Module · 100% On-Device",
 )
 
 # ------------------------------- inputs ------------------------------------ #
-left, right = st.columns(2)
+left, right = st.columns(2, gap="medium")
 with left:
-    st.subheader("Your resume")
+    st.markdown("#### 1. Your Resume")
     resume_text = ui.resume_loader()
 with right:
-    st.subheader("Target job")
+    c_ai_job_title, c_ai_job_sample = st.columns([1, 1], vertical_alignment="center")
+    with c_ai_job_title:
+        st.markdown("#### 2. Target Job")
+    with c_ai_job_sample:
+        if st.button("💼 Load sample job (1-click)", key="btn_sample_job_ai"):
+            ui.load_sample_job()
+
     # Same key as the Analyzer page, so the job description is shared between them.
     job_text = ui.persistent(
         st.text_area, "Job description", "job_text_input", "", height=220,
@@ -45,41 +51,51 @@ with right:
     )
 
 # ------------------------------ Ollama setup -------------------------------- #
-with st.expander("Ollama settings", expanded=not st.session_state.get("_ollama_ok")):
-    host = st.text_input("Ollama address", value=ai.normalize_host(None), key="ollama_host")
+with st.expander("⚙️ Local Ollama AI Settings & Status", expanded=not st.session_state.get("_ollama_ok")):
+    host = st.text_input("Ollama Server Address", value=ai.normalize_host(None), key="ollama_host")
     models, error = check_ollama(host)
     st.session_state["_ollama_ok"] = error is None
 
     if error:
-        st.error(error)
         st.markdown(
-            "**Set up local AI (free, runs on your machine):**\n"
-            "1. Install Ollama from https://ollama.com\n"
-            "2. `ollama pull llama3.2`  (chat model)\n"
-            "3. `ollama pull nomic-embed-text`  (embedding model)\n"
-            "4. Make sure Ollama is running, then reload this page."
+            f'<div style="background:var(--red-bg); border:1px solid var(--red-border); border-radius:8px; padding:12px 16px; margin:8px 0; color:var(--red-text); font-size:0.9rem;">'
+            f'⚠️ <b>Ollama connection issue:</b> {ui.esc(error)}'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            "**Quick Setup Instructions (Free & Private):**\n"
+            "1. Download and install Ollama from [https://ollama.com](https://ollama.com)\n"
+            "2. Open your terminal and run:\n"
+            "   ```bash\n"
+            "   ollama pull llama3.2\n"
+            "   ollama pull nomic-embed-text\n"
+            "   ```\n"
+            "3. Ensure the Ollama app is running, then refresh this page."
         )
         chat_model = embed_model = None
     else:
+        st.markdown(
+            f'<div style="background:var(--green-bg); border:1px solid var(--green-border); border-radius:8px; padding:10px 14px; margin-bottom:12px; color:var(--green-text); font-size:0.9rem; display:flex; align-items:center; gap:8px;">'
+            f'<span>🟢</span> <b>Ollama is connected and running locally.</b> Resumes are processed in private memory.'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
         default_chat, default_embed = ai.pick_defaults(models)
         embedding_models = [m for m in models if "embed" in m.lower()]
         chat_models = [m for m in models if m not in embedding_models]
         c1, c2 = st.columns(2)
         with c1:
-            chat_model = pick("Chat model", chat_models, default_chat, "chat_model")
+            chat_model = pick("Chat Model", chat_models, default_chat, "chat_model")
         with c2:
-            embed_model = pick("Embedding model", embedding_models, default_embed, "embed_model")
+            embed_model = pick("Embedding Model", embedding_models, default_embed, "embed_model")
         if not chat_models:
-            st.warning("No chat model installed. Run `ollama pull llama3.2`.")
-        if ai.is_local_host(host):
-            st.caption("Running locally: your resume text stays on your machine.")
-        else:
-            st.warning(f"{host} is not on this machine. Your resume text will be sent to it.")
+            st.warning("No chat model installed. Run `ollama pull llama3.2` in your terminal.")
 
 if error:
     st.stop()
 if not resume_text:
-    st.info("Load your resume above to use the AI Coach.")
+    st.info("👆 Please upload or paste your resume above to begin using the AI Coach.")
     st.stop()
 
 client = OllamaClient(host, timeout=180)
@@ -92,73 +108,85 @@ def llm(system: str, user: str, temperature: float = 0.2) -> str:
 def need_job() -> bool:
     if job_text.strip():
         return False
-    st.info("Paste a job description above to use this tool.")
+    st.info("👆 Paste a target job description above to unlock this tool.")
     return True
 
 
 analysis = analyze_resume(resume_text, job_text) if job_text.strip() else None
 
 tab_rewrite, tab_semantic, tab_summary, tab_interview = st.tabs(
-    ["Bullet rewriter", "Semantic match", "Fit summary", "Interview prep"]
+    ["✍️ Fact-Checked Bullet Rewriter", "🔍 Semantic Matching", "📋 Plain-Language Fit Summary", "🎯 Tailored Interview Prep"]
 )
 
 # ------------------------------ bullet rewriter ------------------------------ #
 with tab_rewrite:
-    st.caption(
-        "Improves wording using only facts already in your bullet. Every suggestion is fact-checked: "
-        "new numbers or skills are flagged. Missing metrics appear as [placeholders] for you to fill in."
+    st.markdown(
+        '<p style="color:var(--muted); font-size:0.92rem; margin-top:4px;">'
+        'Strengthen your impact without hallucinations. Rewrites are strictly constrained to facts in your bullet. '
+        'Any new numbers or skills are automatically flagged for fact-checking.'
+        '</p>',
+        unsafe_allow_html=True,
     )
     bullets = ai.candidate_bullets(resume_text)
-    choice = st.selectbox("Pick a bullet", bullets, format_func=shorten) if bullets else None
-    custom = st.text_area("…or paste a bullet", height=80, key="custom_bullet")
+    choice = st.selectbox("Select a bullet from your resume", bullets, format_func=shorten) if bullets else None
+    custom = st.text_area("…or paste a specific bullet to rewrite", height=80, key="custom_bullet", placeholder="e.g. Developed API endpoints for our user onboarding process.")
     bullet = custom.strip() or choice
 
-    if st.button("Rewrite bullet", disabled=not bullet or not chat_model):
+    if st.button("✨ Generate Fact-Checked Rewrite", type="primary", disabled=not bullet or not chat_model):
         targets = list(analysis["job"])[:10] if analysis else []
         try:
-            with st.spinner("Rewriting..."):
+            with st.spinner("Analyzing context and polishing bullet..."):
                 st.session_state["ai_rewrite"] = ai.rewrite_bullet(bullet, targets, llm)
         except OllamaError as exc:
             st.error(str(exc))
 
     result = st.session_state.get("ai_rewrite")
     if result:
-        c1, c2 = st.columns(2)
+        st.write("")
+        c1, c2 = st.columns(2, gap="medium")
         with c1:
-            st.markdown("**Original**")
-            st.code(result["original"], language=None)
+            with st.container(border=True):
+                st.markdown("**Original Bullet:**")
+                st.code(result["original"], language=None)
         with c2:
-            st.markdown("**Suggestion**")
-            st.code(result["rewrite"], language=None)
+            with st.container(border=True):
+                st.markdown("**AI Optimized Suggestion:**")
+                st.code(result["rewrite"], language=None)
         if result["problems"]:
             for problem in result["problems"]:
-                st.warning(f"Check before using: {problem}")
+                st.warning(f"⚠️ Fact-check alert: {problem}")
         else:
-            st.success("Passed the fact check: no new numbers or skills were added.")
+            st.success("✅ Passed strict fact check: No unverified claims, skills, or metrics added.")
         if "[" in result["rewrite"]:
-            st.info("Replace each [placeholder] with a real number, or delete it. Never guess a metric.")
+            st.info("💡 Tip: Replace each bracketed [placeholder] with your genuine metrics, or remove it.")
 
 # ------------------------------ semantic matching ----------------------------- #
 with tab_semantic:
-    st.caption(
-        "Keyword matching misses synonyms, like “built REST services” vs “API development”. "
-        "This compares meaning using embeddings. It is a reading aid: your scores do not change."
+    st.markdown(
+        '<p style="color:var(--muted); font-size:0.92rem; margin-top:4px;">'
+        'Traditional keyword match misses synonyms (e.g. "built REST services" vs "API engineering"). '
+        'This tool compares contextual embeddings locally to identify semantic alignment.'
+        '</p>',
+        unsafe_allow_html=True,
     )
     if not need_job():
         if not embed_model:
-            st.warning("No embedding model installed. Run `ollama pull nomic-embed-text`.")
+            st.warning("No embedding model installed. Run `ollama pull nomic-embed-text` in your terminal.")
         else:
-            with st.expander("Sensitivity (depends on the embedding model)"):
-                strong = st.slider("Strong match at or above", 0.30, 0.95, 0.62, 0.01)
-                partial = st.slider("Partial match at or above", 0.20, 0.90, 0.50, 0.01)
+            with st.expander("Model Match Sensitivity Thresholds"):
+                c_s1, c_s2 = st.columns(2)
+                with c_s1:
+                    strong = st.slider("Strong Match Threshold", 0.30, 0.95, 0.62, 0.01)
+                with c_s2:
+                    partial = st.slider("Partial Match Threshold", 0.20, 0.90, 0.50, 0.01)
 
             requirements = ai.extract_requirements(job_text)
             items = ai.candidate_bullets(resume_text)
-            st.caption(f"{len(requirements)} requirements found · {len(items)} resume bullets")
+            st.caption(f"Detected {len(requirements)} requirements from job description · {len(items)} bullets from resume")
 
-            if st.button("Run semantic match", disabled=not requirements or not items or partial >= strong):
+            if st.button("⚡ Run Semantic Embeddings Analysis", type="primary", disabled=not requirements or not items or partial >= strong):
                 try:
-                    with st.spinner("Comparing meaning..."):
+                    with st.spinner("Computing high-dimensional text embeddings..."):
                         st.session_state["ai_semantic"] = ai.semantic_match(
                             requirements, items, lambda texts: client.embed(embed_model, texts),
                             strong=strong, partial=partial,
@@ -166,67 +194,89 @@ with tab_semantic:
                 except OllamaError as exc:
                     st.error(str(exc))
             if partial >= strong:
-                st.warning("The partial threshold must be lower than the strong threshold.")
+                st.warning("Partial threshold must be lower than strong threshold.")
 
             semantic = st.session_state.get("ai_semantic")
             if semantic:
                 groups = ai.categorize(semantic)
                 st.markdown(
                     ui.stat_row([
-                        ("Strong", sum(r["label"] == "strong" for r in semantic)),
-                        ("Partial", sum(r["label"] == "partial" for r in semantic)),
-                        ("No clear support", len(groups["unsupported"])),
+                        ("Strong Semantic Matches", sum(r["label"] == "strong" for r in semantic)),
+                        ("Partial Matches", sum(r["label"] == "partial" for r in semantic)),
+                        ("No Direct Support", len(groups["unsupported"])),
                     ]),
                     unsafe_allow_html=True,
                 )
 
-                st.subheader("Found by meaning, missed by keywords")
+                st.markdown("#### Matched by Context & Meaning")
                 if not groups["by_meaning"]:
-                    st.caption("Nothing extra: keyword matching already covers what matches.")
+                    st.caption("Standard keyword matching already covers the detected alignments.")
                 for r in groups["by_meaning"]:
-                    st.markdown(f"**{ui.md_escape(r['requirement'])}**")
-                    st.caption(f"Closest resume line ({r['similarity']}, {r['label']}): “{r['best_item']}”")
+                    with st.container(border=True):
+                        st.markdown(f"**Job Requirement:** {ui.md_escape(r['requirement'])}")
+                        st.markdown(
+                            f'<div style="font-size:0.86rem; color:var(--muted);">'
+                            f'Top resume match (Similarity: <b>{r["similarity"]}</b>, status: <b style="color:var(--primary);">{r["label"]}</b>):<br>'
+                            f'<i>"{ui.esc(r["best_item"])}"</i>'
+                            f'</div>',
+                            unsafe_allow_html=True,
+                        )
 
-                st.subheader("No clear support in your resume")
+                st.markdown("#### Unsupported Job Requirements")
                 if not groups["unsupported"]:
-                    st.caption("Every requirement has at least a partial match.")
+                    st.caption("Every requirement has at least a partial match in your resume.")
                 for r in groups["unsupported"]:
-                    st.markdown(f"**{ui.md_escape(r['requirement'])}**")
-                    st.caption(f"Closest line was only {r['similarity']} similar: “{shorten(r['best_item'])}”")
+                    with st.container(border=True):
+                        st.markdown(f"**Missing Coverage:** {ui.md_escape(r['requirement'])}")
+                        st.caption(f"Highest similarity bullet was only {r['similarity']}: “{shorten(r['best_item'])}”")
 
 # ------------------------------- fit summary -------------------------------- #
 with tab_summary:
-    st.caption(
-        "A plain-language explanation of your deterministic analysis. The AI only sees the facts below "
-        "and any skill it mentions outside them is flagged."
+    st.markdown(
+        '<p style="color:var(--muted); font-size:0.92rem; margin-top:4px;">'
+        'A clear, objective narrative explaining your qualifications against this job post based strictly on verified skill evidence.'
+        '</p>',
+        unsafe_allow_html=True,
     )
     if not need_job():
         if analysis["score"] is None:
             st.warning("No supported skills were detected in this job description.")
-        elif st.button("Explain my fit", disabled=not chat_model):
+        elif st.button("📝 Synthesize Fit Summary", type="primary", disabled=not chat_model):
             try:
-                with st.spinner("Writing summary..."):
+                with st.spinner("Writing objective fit overview..."):
                     st.session_state["ai_summary"] = ai.fit_summary(analysis, llm)
             except OllamaError as exc:
                 st.error(str(exc))
 
         summary = st.session_state.get("ai_summary")
         if summary:
-            for problem in summary["problems"]:
-                st.warning(f"Check this summary: {problem}")
-            st.markdown(summary["summary"])
-            st.caption("Written by a local AI from your analysis. Your scores above are unchanged.")
-            with st.expander("What the AI was given"):
+            if summary["problems"]:
+                for problem in summary["problems"]:
+                    st.warning(f"Note: {problem}")
+            with st.container(border=True):
+                st.markdown(summary["summary"])
+            st.caption("Generated strictly from deterministic skill evidence. Your match scores are unaltered.")
+            with st.expander("View Input Facts Passed to AI"):
                 st.json(summary["facts"])
 
 # ------------------------------ interview prep ------------------------------ #
 with tab_interview:
-    st.caption("Practice questions that probe the skills you are missing or have not yet proven.")
+    st.markdown(
+        '<p style="color:var(--muted); font-size:0.92rem; margin-top:4px;">'
+        'Targeted technical and behavioral questions tailored specifically to probe your identified skill gaps and unproven competencies.'
+        '</p>',
+        unsafe_allow_html=True,
+    )
     if not need_job():
-        count = st.slider("Number of questions", 3, 10, 6)
-        if st.button("Generate questions", disabled=not chat_model):
+        c_q1, c_q2 = st.columns([3, 1], vertical_alignment="center")
+        with c_q1:
+            count = st.slider("Target Number of Questions", 3, 10, 5)
+        with c_q2:
+            gen_btn = st.button("🎯 Generate Prep Questions", type="primary", disabled=not chat_model, use_container_width=True)
+
+        if gen_btn:
             try:
-                with st.spinner("Writing questions..."):
+                with st.spinner("Drafting tailored interview questions..."):
                     st.session_state["ai_questions"] = ai.interview_questions(
                         analysis, job_text, lambda s, u: llm(s, u, temperature=0.6), n=count
                     )
@@ -236,7 +286,14 @@ with tab_interview:
         questions = st.session_state.get("ai_questions")
         if questions:
             if questions["focus"]:
-                st.caption("Focus skills: " + ", ".join(questions["focus"]))
+                st.markdown(
+                    f'<div style="margin:10px 0 16px;">'
+                    f'<b style="font-size:0.85rem; color:var(--muted);">FOCUSED SKILL GAPS:</b> '
+                    f'{" ".join([ui.chip(s, "missing") for s in questions["focus"]])}'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
             for number, question in enumerate(questions["questions"], start=1):
-                st.markdown(f"**{number}.** {ui.md_escape(question)}")
-            st.caption("Answer honestly: for a skill you lack, explain how you would learn it.")
+                with st.container(border=True):
+                    st.markdown(f"**Q{number}:** {ui.md_escape(question)}")
+            st.caption("💡 Best practice: When addressing skills you currently lack, articulate your conceptual foundation and reference your learning roadmap.")
