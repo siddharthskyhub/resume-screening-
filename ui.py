@@ -1742,7 +1742,7 @@ input[type="text"]:focus, textarea:focus {
 
 @media (max-width: 640px) {
     .block-container { padding: 1.2rem 0.8rem 2.5rem !important; }
-    .home-title { font-size: 2.15rem; }
+    .home-title { font-size: 2.15rem; word-break: break-word; }
     .home-sub { font-size: 1.02rem; }
     .proof-num { font-size: 2.5rem; }
     .proof { padding: 18px; }
@@ -1750,12 +1750,16 @@ input[type="text"]:focus, textarea:focus {
     .demand { grid-template-columns: 1fr; gap: 6px; }
     .demand-meta { text-align: left; }
     .flow { flex-direction: column; gap: 10px; }
-    .scanner-hero-stage { padding: 12px 2px; }
-    .scanner-badge { padding: 5px 10px; font-size: 0.74rem; }
-    .scanner-badge.badge-top-left { left: 4px; top: -14px; }
-    .scanner-badge.badge-top-right { right: 4px; top: -14px; }
-    .scanner-badge.badge-bottom-left { left: 4px; bottom: -12px; }
+    .scanner-hero-stage { padding: 12px 2px; max-width: 100%; }
+    .scanner-doc-card { padding: 16px 14px; }
+    .scanner-badge { padding: 4px 8px; font-size: 0.72rem; }
+    .scanner-badge.badge-top-left { left: 2px; top: -14px; }
+    .scanner-badge.badge-top-right { right: 2px; top: -14px; }
+    .scanner-badge.badge-bottom-left { left: 2px; bottom: -12px; }
     .scanner-badge.badge-bottom-right { display: none; }
+    .doc-metrics-footer { gap: 4px; }
+    .doc-metric-num { font-size: 0.95rem; }
+    .doc-metric-lbl { font-size: 0.62rem; }
 }
 </style>
 """
