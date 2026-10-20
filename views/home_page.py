@@ -58,16 +58,19 @@ with left:
         'required skills are proven by quantifiable projects, merely listed, or missing entirely — then helps you close the gaps.</p>',
         unsafe_allow_html=True,
     )
-    c_action1, c_action2 = st.columns([1, 1])
+    c_action1, c_action2, c_action3 = st.columns([1.2, 1.1, 1.3], gap="small")
     with c_action1:
-        if st.button("🚀 Analyze a resume", type="primary", use_container_width=True):
+        if st.button("🚀 Analyze resume", type="primary", use_container_width=True):
             st.switch_page("views/analyzer_page.py")
     with c_action2:
-        if st.button("✨ 1-Click Demo (Sample data)", key="btn_home_sample_demo", use_container_width=True):
+        if st.button("⚡ ATS Checker", use_container_width=True):
+            st.switch_page("views/ats_checker_page.py")
+    with c_action3:
+        if st.button("✨ 1-Click Demo", key="btn_home_sample_demo", use_container_width=True):
             ui.load_sample_data()
             st.switch_page("views/analyzer_page.py")
 with right:
-    st.markdown(SHEET, unsafe_allow_html=True)
+    st.markdown(ui.interactive_scanner_preview(), unsafe_allow_html=True)
 
 st.write("")
 counts = tracker.status_counts()

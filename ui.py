@@ -961,11 +961,383 @@ input[type="text"]:focus, textarea:focus {
     margin-bottom: 10px;
 }
 
+/* ---------- Enhancv-Style Live Scanner & Floating Badges ---------- */
+@keyframes scanLaser {
+    0% {
+        top: 0%;
+        opacity: 0.95;
+    }
+    48% {
+        top: calc(100% - 3px);
+        opacity: 1;
+    }
+    52% {
+        top: calc(100% - 3px);
+        opacity: 1;
+    }
+    100% {
+        top: 0%;
+        opacity: 0.95;
+    }
+}
+
+@keyframes orbFloat {
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    100% {
+        transform: translate(14px, -12px) scale(1.08);
+    }
+}
+
+@keyframes floatBadge1 {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes floatBadge2 {
+    0%, 100% {
+        transform: translate(0px, 0px);
+    }
+    50% {
+        transform: translate(3px, -7px);
+    }
+}
+
+@keyframes floatBadge3 {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes floatBadge4 {
+    0%, 100% {
+        transform: translate(0px, 0px);
+    }
+    50% {
+        transform: translate(-3px, -6px);
+    }
+}
+
+@keyframes radarPulseRing {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.65);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 7px rgba(16, 185, 129, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+.scanner-hero-stage {
+    position: relative;
+    padding: 22px 14px;
+    margin: 0 auto;
+    max-width: 490px;
+    z-index: 1;
+}
+
+.scanner-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(48px);
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 0;
+    animation: orbFloat 7s ease-in-out infinite alternate;
+}
+
+.scanner-orb-1 {
+    width: 220px;
+    height: 220px;
+    top: -24px;
+    right: -24px;
+    background: radial-gradient(circle, #6366f1 0%, rgba(99, 102, 241, 0) 70%);
+}
+
+.scanner-orb-2 {
+    width: 200px;
+    height: 200px;
+    bottom: -24px;
+    left: -20px;
+    background: radial-gradient(circle, #10b981 0%, rgba(16, 185, 129, 0) 70%);
+    animation-delay: -3.5s;
+}
+
+.scanner-badge {
+    position: absolute;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 13px;
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 9999px;
+    box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.12), 0 4px 8px -2px rgba(15, 23, 42, 0.05);
+    backdrop-filter: blur(8px);
+    user-select: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.scanner-badge:hover {
+    box-shadow: 0 14px 28px -4px rgba(15, 23, 42, 0.16);
+    transform: scale(1.03);
+}
+
+.scanner-badge.badge-top-right {
+    top: 2px;
+    right: -12px;
+    animation: floatBadge1 4.2s ease-in-out infinite;
+}
+
+.scanner-badge.badge-top-left {
+    top: 52px;
+    left: -18px;
+    animation: floatBadge2 4.8s ease-in-out infinite 0.4s;
+}
+
+.scanner-badge.badge-bottom-right {
+    bottom: 46px;
+    right: -16px;
+    animation: floatBadge3 4.4s ease-in-out infinite 0.9s;
+}
+
+.scanner-badge.badge-bottom-left {
+    bottom: -6px;
+    left: 4px;
+    animation: floatBadge4 5.2s ease-in-out infinite 1.4s;
+}
+
+.badge-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.badge-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.badge-val {
+    font-size: 0.84rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.scanner-doc-card {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 18px;
+    padding: 22px 24px;
+    box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.05);
+    overflow: hidden;
+    z-index: 2;
+}
+
+.scanner-laser-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(99, 102, 241, 0) 0%, rgba(6, 182, 212, 0.9) 25%, rgba(16, 185, 129, 1) 50%, rgba(6, 182, 212, 0.9) 75%, rgba(99, 102, 241, 0) 100%);
+    box-shadow: 0 0 14px 3px rgba(16, 185, 129, 0.75), 0 0 28px rgba(6, 182, 212, 0.45);
+    pointer-events: none;
+    z-index: 15;
+    animation: scanLaser 3.8s ease-in-out infinite;
+}
+
+.scanner-laser-glow {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -36px;
+    height: 38px;
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0) 0%, rgba(16, 185, 129, 0.14) 100%);
+    pointer-events: none;
+}
+
+.scanner-doc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+}
+
+.scanner-radar {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.radar-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    animation: radarPulseRing 1.8s infinite;
+    display: inline-block;
+}
+
+.radar-text {
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: #047857;
+    text-transform: uppercase;
+}
+
+.scanner-doc-badge {
+    font-size: 0.76rem;
+    font-weight: 800;
+    color: #1d4ed8;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    padding: 3px 9px;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.scanner-doc-body {
+    line-height: 1.6;
+    font-size: 0.94rem;
+}
+
+.doc-person-name {
+    font-family: var(--display);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+}
+
+.doc-person-sub {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+
+.doc-section-h {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 10px;
+    margin-bottom: 6px;
+}
+
+.doc-chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.doc-exp-item {
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    margin-bottom: 10px;
+    font-size: 0.86rem;
+}
+
+.doc-exp-title {
+    color: var(--ink);
+    margin-bottom: 3px;
+}
+
+.doc-exp-bullet {
+    color: var(--ink-light);
+    line-height: 1.45;
+}
+
+.doc-ask-strip {
+    background: #ffffff;
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-sm);
+    padding: 8px 11px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 12px;
+}
+
+.doc-ask-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--muted);
+    margin-right: 4px;
+}
+
+.doc-metrics-footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line-subtle);
+    text-align: center;
+}
+
+.doc-metric-item {
+    background: #f8fafc;
+    border: 1px solid var(--line-subtle);
+    border-radius: var(--radius-sm);
+    padding: 6px 4px;
+}
+
+.doc-metric-num {
+    font-family: var(--display);
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.1;
+}
+
+.doc-metric-lbl {
+    font-size: 0.68rem;
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-top: 2px;
+}
+
 /* ---------- Responsive Media Queries ---------- */
 @media (max-width: 900px) {
     .home-title { font-size: 2.5rem; }
     .proof-num { font-size: 3rem; }
     .stats-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    .scanner-hero-stage { max-width: 440px; }
 }
 
 @media (max-width: 640px) {
@@ -978,6 +1350,12 @@ input[type="text"]:focus, textarea:focus {
     .demand { grid-template-columns: 1fr; gap: 6px; }
     .demand-meta { text-align: left; }
     .flow { flex-direction: column; gap: 10px; }
+    .scanner-hero-stage { padding: 12px 2px; }
+    .scanner-badge { padding: 5px 10px; font-size: 0.74rem; }
+    .scanner-badge.badge-top-left { left: 4px; top: -14px; }
+    .scanner-badge.badge-top-right { right: 4px; top: -14px; }
+    .scanner-badge.badge-bottom-left { left: 4px; bottom: -12px; }
+    .scanner-badge.badge-bottom-right { display: none; }
 }
 </style>
 """
@@ -1039,6 +1417,77 @@ def stat_row(items: list[tuple[str, object]]) -> str:
 
 def metric_card(label: str, value: str) -> str:  # backwards compatible
     return stat_row([(label, value)])
+
+
+def interactive_scanner_preview() -> str:
+    """Enhancv-inspired dynamic scanner card with vertical sweeping laser,
+    pulsing ambient glow orbs, and animated floating insight badges."""
+    return (
+        '<div class="scanner-hero-stage">'
+        '<div class="scanner-orb scanner-orb-1"></div>'
+        '<div class="scanner-orb scanner-orb-2"></div>'
+        '<div class="scanner-badge badge-top-right">'
+        '<span class="badge-icon" style="background:#ecfdf5; color:#047857;">✨</span>'
+        '<div><div class="badge-title">ATS Score</div>'
+        '<div class="badge-val" style="color:#047857;">94% Optimal</div></div>'
+        '</div>'
+        '<div class="scanner-badge badge-top-left">'
+        '<span class="badge-icon" style="background:#eef2ff; color:#4f46e5;">🎯</span>'
+        '<div><div class="badge-title">Keywords</div>'
+        '<div class="badge-val" style="color:#4f46e5;">14 Matched</div></div>'
+        '</div>'
+        '<div class="scanner-badge badge-bottom-right">'
+        '<span class="badge-icon" style="background:#fffbeb; color:#b45309;">⚡</span>'
+        '<div><div class="badge-title">Action Verbs</div>'
+        '<div class="badge-val" style="color:#b45309;">18 High-Impact</div></div>'
+        '</div>'
+        '<div class="scanner-badge badge-bottom-left">'
+        '<span class="badge-icon" style="background:#ecfeff; color:#0e7490;">✓</span>'
+        '<div><div class="badge-title">Format Hygiene</div>'
+        '<div class="badge-val" style="color:#0e7490;">Single Column ATS</div></div>'
+        '</div>'
+        '<div class="scanner-doc-card">'
+        '<div class="scanner-laser-line">'
+        '<div class="scanner-laser-glow"></div>'
+        '</div>'
+        '<div class="scanner-doc-header">'
+        '<div class="scanner-radar">'
+        '<span class="radar-dot"></span>'
+        '<span class="radar-text">SCANNING IN PROGRESS</span>'
+        '</div>'
+        '<span class="scanner-doc-badge">ATS COMPLIANT</span>'
+        '</div>'
+        '<div class="scanner-doc-body">'
+        '<div class="doc-person-name">Alex Rivera</div>'
+        '<div class="doc-person-sub">Senior Software Engineer · San Francisco, CA</div>'
+        '<div class="doc-section-h">TECHNICAL SKILLS</div>'
+        '<div class="doc-chips-row">'
+        f'{chip("Python", "matched")}'
+        f'{chip("FastAPI", "matched")}'
+        f'{chip("PostgreSQL", "matched")}'
+        f'{chip("Docker", "unproven")}'
+        '</div>'
+        '<div class="doc-section-h">EXPERIENCE &amp; PROJECTS</div>'
+        '<div class="doc-exp-item">'
+        '<div class="doc-exp-title"><b>Apex Cloud Technologies</b> — Senior Backend Engineer</div>'
+        f'<div class="doc-exp-bullet">• Architected {chip("FastAPI", "matched")} microservices cutting latency by <b>35%</b> and scaling to <b>45k req/day</b>.</div>'
+        '</div>'
+        '<div class="doc-section-h" style="margin-top:10px;">TARGET JOB MATCH COMPARISON</div>'
+        '<div class="doc-ask-strip">'
+        '<span class="doc-ask-label">REQUIREMENTS:</span>'
+        f'{chip("FastAPI", "matched")}'
+        f'{chip("Docker", "unproven")}'
+        f'{chip("Kubernetes", "missing")}'
+        '</div>'
+        '<div class="doc-metrics-footer">'
+        '<div class="doc-metric-item"><div class="doc-metric-num">92%</div><div class="doc-metric-lbl">Keyword Match</div></div>'
+        '<div class="doc-metric-item"><div class="doc-metric-num">0</div><div class="doc-metric-lbl">Parsing Errors</div></div>'
+        '<div class="doc-metric-item"><div class="doc-metric-num">100%</div><div class="doc-metric-lbl">Section Detection</div></div>'
+        '</div>'
+        '</div>'
+        '</div>'
+        '</div>'
+    )
 
 
 def chip(name: str, css: str) -> str:

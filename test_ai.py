@@ -7,7 +7,12 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import ai
 from analyzer import analyze_resume
-from test_analyzer import RESUME
+
+RESUME = """
+Skills: Python, Docker
+Experience:
+• Built a FastAPI and Python service handling 2,000 requests/day and cut latency by 35%.
+"""
 
 
 # ---------------------------- fake Ollama server ---------------------------- #
