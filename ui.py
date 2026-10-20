@@ -8,6 +8,7 @@ import html
 import re
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 from analyzer import ResumeError, extract_text
 
@@ -20,18 +21,34 @@ CSS = """
     --ink-light: #1e293b;
     --muted: #64748b;
     --subtle: #94a3b8;
-    --line: #e2e8f0;
-    --line-subtle: #f1f5f9;
+    --line: #e4daf4;
+    --line-subtle: #efe7f8;
     --card-bg: #ffffff;
-    --canvas: #f8fafc;
+    --canvas: #f6f1fc;
+
+    /* Light Purple Theme Palette */
+    --purple-base: #f5effc;
+    --purple-light: #faf5fe;
+    --purple-canvas: #f6f1fc;
+    --purple-border: #e2d4f5;
+    --purple-subtle: #ede3f8;
+    --purple-gradient: linear-gradient(135deg, #f7f3fd 0%, #f3ecfb 40%, #f6f0fc 70%, #f4eefa 100%);
+
+    /* Soft Pastel Pink Spotlight & Accent */
+    --pink-spotlight: rgba(244, 114, 182, 0.22);
+    --pink-glow: rgba(244, 114, 182, 0.16);
+    --pink-accent: #f472b6;
+    --pink-light: #fdf2f8;
+    --pink-border: #fbcfe8;
+    --pink-gradient: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
 
     /* Vibrant Brand & Accents */
-    --primary: #4f46e5;
-    --primary-hover: #4338ca;
-    --primary-light: #eef2ff;
-    --primary-border: #c7d2fe;
-    --primary-glow: rgba(79, 70, 229, 0.18);
-    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #3b82f6 100%);
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --primary-light: #f5f3ff;
+    --primary-border: #ddd6fe;
+    --primary-glow: rgba(99, 102, 241, 0.22);
+    --primary-gradient: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #ec4899 100%);
 
     /* Colorful Status Palettes */
     --green-bg: #ecfdf5;
@@ -81,16 +98,25 @@ CSS = """
     --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
     --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
     --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
-    --shadow-colored: 0 4px 14px rgba(79, 70, 229, 0.25);
+    --shadow-colored: 0 4px 14px rgba(124, 58, 237, 0.25);
 }
 
-/* ---------- Global Reset & Atmosphere ---------- */
+/* ---------- Global Reset & Pastel Light Purple Background ---------- */
 html, body, .stApp {
     font-family: var(--sans);
     color: var(--ink);
-    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    background: linear-gradient(135deg, #f7f3fd 0%, #f3ecfb 35%, #f6f0fc 70%, #f4eefa 100%) !important;
+    background-attachment: fixed !important;
+    min-height: 100vh !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+[data-testid="stAppViewContainer"],
+[data-testid="stAppViewBlockContainer"],
+.main,
+section.main {
+    background: transparent !important;
 }
 
 .block-container {
@@ -101,10 +127,72 @@ html, body, .stApp {
 }
 
 header[data-testid="stHeader"] {
-    background: transparent;
+    background: transparent !important;
 }
 footer {
     visibility: hidden;
+}
+
+/* Zero-height custom component iframes cleanly hidden */
+div[data-testid="stCustomComponentV1"]:has(iframe[height="0"]),
+iframe[height="0"] {
+    display: none !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    border: none !important;
+    overflow: hidden !important;
+}
+
+/* ---------- Cursor-Following Soft Light Pink Spotlight ---------- */
+#cursor-spotlight-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 440px;
+    height: 440px;
+    margin-top: -220px;
+    margin-left: -220px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(244, 114, 182, 0.22) 0%,
+        rgba(251, 182, 206, 0.14) 30%,
+        rgba(244, 114, 182, 0.05) 55%,
+        rgba(244, 114, 182, 0) 72%
+    );
+    filter: blur(14px);
+    pointer-events: none !important;
+    z-index: 999999;
+    opacity: 0;
+    transform: translate3d(-9999px, -9999px, 0);
+    transition: opacity 0.35s ease, width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), margin 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+    will-change: transform, opacity;
+}
+
+#cursor-spotlight-glow.spotlight-visible {
+    opacity: 1;
+}
+
+#cursor-spotlight-glow.spotlight-hovering {
+    width: 520px;
+    height: 520px;
+    margin-top: -260px;
+    margin-left: -260px;
+    background: radial-gradient(
+        circle,
+        rgba(244, 114, 182, 0.32) 0%,
+        rgba(251, 113, 133, 0.18) 32%,
+        rgba(244, 114, 182, 0.08) 58%,
+        rgba(244, 114, 182, 0) 75%
+    );
+    filter: blur(16px);
+}
+
+@media (hover: none) and (pointer: coarse) {
+    #cursor-spotlight-glow {
+        display: none !important;
+    }
 }
 
 h1, h2, h3, h4 {
@@ -124,17 +212,18 @@ div.stButton > button {
     font-size: 0.92rem;
     letter-spacing: -0.01em;
     padding: 0.5rem 1.15rem;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: var(--shadow-xs);
-    border: 1px solid var(--line);
+    border: 1px solid var(--purple-border);
     background: #ffffff;
     color: var(--ink);
 }
 div.stButton > button:hover {
-    border-color: #cbd5e1;
-    background: #f8fafc;
+    border-color: var(--pink-accent);
+    background: #fff5f9;
+    color: #be185d;
     transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 14px rgba(244, 114, 182, 0.25);
 }
 div.stButton > button:active {
     transform: translateY(0);
@@ -147,37 +236,39 @@ div.stButton > button[kind="primary"] {
     box-shadow: var(--shadow-colored) !important;
 }
 div.stButton > button[kind="primary"]:hover {
-    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%) !important;
-    box-shadow: 0 6px 18px rgba(79, 70, 229, 0.4) !important;
-    transform: translateY(-1.5px);
+    background: linear-gradient(135deg, #6d28d9 0%, #4f46e5 50%, #db2777 100%) !important;
+    box-shadow: 0 8px 22px rgba(236, 72, 153, 0.4) !important;
+    transform: translateY(-1.5px) scale(1.01);
 }
 
 div.stDownloadButton > button {
     border-radius: var(--radius-sm);
     font-weight: 600;
     background: #ffffff;
-    border: 1px solid var(--primary-border);
+    border: 1px solid var(--purple-border);
     color: var(--primary);
     transition: all 0.2s ease;
 }
 div.stDownloadButton > button:hover {
-    background: var(--primary-light);
-    border-color: var(--primary);
+    background: #fff5f9;
+    border-color: var(--pink-accent);
+    color: #be185d;
     transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 14px rgba(244, 114, 182, 0.22);
 }
 
 /* Expanders */
 [data-testid="stExpander"] details {
-    border: 1px solid var(--line) !important;
+    border: 1px solid var(--purple-border) !important;
     border-radius: var(--radius-md) !important;
     background: #ffffff !important;
     box-shadow: var(--shadow-xs);
     transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 [data-testid="stExpander"] details:hover {
-    border-color: #cbd5e1;
-    box-shadow: var(--shadow-sm);
+    border-color: var(--pink-border);
+    box-shadow: 0 4px 14px rgba(244, 114, 182, 0.12);
+}
 }
 [data-testid="stExpander"] summary {
     font-weight: 600;
@@ -233,19 +324,20 @@ div.stDownloadButton > button:hover {
 /* Form Inputs */
 input[type="text"], textarea, [data-baseweb="select"] {
     border-radius: var(--radius-sm) !important;
-    border-color: var(--line) !important;
+    border-color: var(--purple-border) !important;
     font-family: var(--sans) !important;
+    background: #ffffff !important;
 }
 input[type="text"]:focus, textarea:focus {
-    border-color: var(--primary) !important;
-    box-shadow: 0 0 0 3px var(--primary-glow) !important;
+    border-color: var(--pink-accent) !important;
+    box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.22) !important;
 }
 
 /* ---------- Creative Sidebar Styling & Atmosphere ---------- */
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 40%, #f1f5f9 100%) !important;
-    border-right: 1px solid #e2e8f0 !important;
-    box-shadow: 4px 0 24px rgba(15, 23, 42, 0.05) !important;
+    background: linear-gradient(180deg, #f4edfb 0%, #f8f4fc 50%, #f3ecfa 100%) !important;
+    border-right: 1px solid #e5daf5 !important;
+    box-shadow: 4px 0 24px rgba(139, 92, 246, 0.05) !important;
     position: relative !important;
 }
 
@@ -255,8 +347,8 @@ input[type="text"]:focus, textarea:focus {
     top: 0;
     left: 0;
     right: 0;
-    height: 180px;
-    background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.14) 0%, rgba(236, 72, 153, 0.05) 60%, transparent 100%);
+    height: 220px;
+    background: radial-gradient(circle at 50% 0%, rgba(244, 114, 182, 0.16) 0%, rgba(168, 85, 247, 0.08) 60%, transparent 100%);
     pointer-events: none;
     z-index: 0;
 }
@@ -662,13 +754,13 @@ input[type="text"]:focus, textarea:focus {
 }
 .stat-card {
     background: #ffffff;
-    border: 1px solid var(--line);
+    border: 1px solid var(--purple-border);
     border-radius: var(--radius-md);
     padding: 16px 20px;
     box-shadow: var(--shadow-xs);
     position: relative;
     overflow: hidden;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -682,16 +774,16 @@ input[type="text"]:focus, textarea:focus {
     height: 3px;
     background: var(--stat-c, var(--primary));
 }
-.stat-card:nth-child(1) { --stat-c: #4f46e5; }
-.stat-card:nth-child(2) { --stat-c: #06b6d4; }
+.stat-card:nth-child(1) { --stat-c: #7c3aed; }
+.stat-card:nth-child(2) { --stat-c: #ec4899; }
 .stat-card:nth-child(3) { --stat-c: #10b981; }
 .stat-card:nth-child(4) { --stat-c: #f59e0b; }
 .stat-card:nth-child(5) { --stat-c: #8b5cf6; }
 
 .stat-card:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    border-color: #cbd5e1;
+    box-shadow: 0 8px 22px -2px rgba(244, 114, 182, 0.20), 0 2px 6px rgba(124, 58, 237, 0.05);
+    border-color: var(--pink-border);
 }
 .stat-label {
     color: var(--muted);
@@ -713,16 +805,17 @@ input[type="text"]:focus, textarea:focus {
 /* ---------- Panels / Cards ---------- */
 .panel {
     background: #ffffff;
-    border: 1px solid var(--line);
+    border: 1px solid var(--purple-border);
     border-radius: var(--radius-md);
     padding: 20px 22px;
     margin-bottom: 14px;
     box-shadow: var(--shadow-xs);
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: box-shadow 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
 }
 .panel:hover {
-    box-shadow: var(--shadow-sm);
-    border-color: #cbd5e1;
+    box-shadow: 0 8px 24px -4px rgba(244, 114, 182, 0.18), 0 2px 6px rgba(124, 58, 237, 0.05);
+    border-color: var(--pink-border);
+    transform: translateY(-1px);
 }
 .panel h3 {
     font-size: 1.15rem !important;
@@ -839,13 +932,18 @@ input[type="text"]:focus, textarea:focus {
 /* ---------- Evidence & Proof Bar Card ---------- */
 .proof {
     background: #ffffff;
-    border: 1px solid var(--line);
+    border: 1px solid var(--purple-border);
     border-radius: var(--radius-lg);
     padding: 24px 28px;
     margin-bottom: 16px;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 20px -2px rgba(139, 92, 246, 0.06);
     position: relative;
     overflow: hidden;
+    transition: all 0.24s ease;
+}
+.proof:hover {
+    border-color: var(--pink-border);
+    box-shadow: 0 8px 26px -2px rgba(244, 114, 182, 0.16);
 }
 .proof-top {
     display: flex;
@@ -1102,13 +1200,18 @@ input[type="text"]:focus, textarea:focus {
 /* Resume Editor Sheet Preview */
 .sheet {
     background: #ffffff;
-    border: 1px solid var(--line);
+    border: 1px solid var(--purple-border);
     border-radius: var(--radius-lg);
     padding: 24px 26px;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 10px 25px -4px rgba(139, 92, 246, 0.08);
     line-height: 1.8;
     font-size: 0.96rem;
     position: relative;
+    transition: border-color 0.22s ease, box-shadow 0.22s ease;
+}
+.sheet:hover {
+    border-color: var(--pink-border);
+    box-shadow: 0 14px 30px -4px rgba(244, 114, 182, 0.18);
 }
 .sheet-doc-header {
     display: flex;
@@ -1166,16 +1269,16 @@ input[type="text"]:focus, textarea:focus {
     align-items: flex-start;
     padding: 14px 16px;
     background: #ffffff;
-    border: 1px solid var(--line);
+    border: 1px solid var(--purple-border);
     border-radius: var(--radius-md);
     margin-bottom: 10px;
     box-shadow: var(--shadow-xs);
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .flow:hover {
-    border-color: #cbd5e1;
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
+    border-color: var(--pink-border);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px -2px rgba(244, 114, 182, 0.18);
 }
 .flow-num {
     flex: 0 0 34px;
@@ -1356,7 +1459,7 @@ input[type="text"]:focus, textarea:focus {
     height: 220px;
     top: -24px;
     right: -24px;
-    background: radial-gradient(circle, #6366f1 0%, rgba(99, 102, 241, 0) 70%);
+    background: radial-gradient(circle, #a855f7 0%, rgba(168, 85, 247, 0) 70%);
 }
 
 .scanner-orb-2 {
@@ -1364,7 +1467,7 @@ input[type="text"]:focus, textarea:focus {
     height: 200px;
     bottom: -24px;
     left: -20px;
-    background: radial-gradient(circle, #10b981 0%, rgba(16, 185, 129, 0) 70%);
+    background: radial-gradient(circle, #f472b6 0%, rgba(244, 114, 182, 0) 70%);
     animation-delay: -3.5s;
 }
 
@@ -1443,12 +1546,17 @@ input[type="text"]:focus, textarea:focus {
 .scanner-doc-card {
     position: relative;
     background: #ffffff;
-    border: 1px solid rgba(226, 232, 240, 0.95);
+    border: 1px solid var(--purple-border);
     border-radius: 18px;
     padding: 22px 24px;
-    box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.05);
+    box-shadow: 0 20px 40px -8px rgba(139, 92, 246, 0.12), 0 2px 6px rgba(15, 23, 42, 0.04);
     overflow: hidden;
     z-index: 2;
+    transition: border-color 0.22s ease, box-shadow 0.22s ease;
+}
+.scanner-doc-card:hover {
+    border-color: var(--pink-border);
+    box-shadow: 0 24px 48px -8px rgba(244, 114, 182, 0.22), 0 4px 10px rgba(124, 58, 237, 0.06);
 }
 
 .scanner-laser-line {
@@ -1671,8 +1779,93 @@ def esc(value) -> str:
     return html.escape(str(value))
 
 
+def inject_cursor_spotlight() -> None:
+    """Inject a lightweight, fluid, 60fps cursor-following soft pink spotlight."""
+    components.html(
+        """
+        <script>
+        (function() {
+            try {
+                const doc = window.parent.document;
+                if (!doc) return;
+
+                let spotlight = doc.getElementById('cursor-spotlight-glow');
+                if (!spotlight) {
+                    spotlight = doc.createElement('div');
+                    spotlight.id = 'cursor-spotlight-glow';
+                    doc.body.appendChild(spotlight);
+                }
+
+                let mouseX = -9999, mouseY = -9999;
+                let currentX = -9999, currentY = -9999;
+                let isVisible = false;
+                let isInteractive = false;
+
+                function render() {
+                    if (isVisible) {
+                        currentX += (mouseX - currentX) * 0.22;
+                        currentY += (mouseY - currentY) * 0.22;
+                        spotlight.style.transform = 'translate3d(' + Math.round(currentX) + 'px, ' + Math.round(currentY) + 'px, 0)';
+                    }
+                    requestAnimationFrame(render);
+                }
+
+                if (!window.parent._cursorSpotlightInit) {
+                    window.parent._cursorSpotlightInit = true;
+
+                    doc.addEventListener('mousemove', function(e) {
+                        mouseX = e.clientX;
+                        mouseY = e.clientY;
+                        if (!isVisible) {
+                            isVisible = true;
+                            currentX = mouseX;
+                            currentY = mouseY;
+                            spotlight.classList.add('spotlight-visible');
+                        }
+
+                        const target = e.target;
+                        const interactive = target && target.closest && target.closest(
+                            'button, a, input, textarea, select, .stButton, .stat-card, .panel, .flow, .scanner-doc-card, .sidebar-status-card, [data-testid="stSidebarNavLink"], .page-head, .home-hero-badge, .mk, .doc-metric-item, .sidebar-tip-card'
+                        );
+                        if (interactive && !isInteractive) {
+                            isInteractive = true;
+                            spotlight.classList.add('spotlight-hovering');
+                        } else if (!interactive && isInteractive) {
+                            isInteractive = false;
+                            spotlight.classList.remove('spotlight-hovering');
+                        }
+                    }, { passive: true });
+
+                    doc.addEventListener('mouseleave', function() {
+                        isVisible = false;
+                        spotlight.classList.remove('spotlight-visible');
+                    }, { passive: true });
+
+                    doc.addEventListener('mouseenter', function(e) {
+                        isVisible = true;
+                        mouseX = e.clientX;
+                        mouseY = e.clientY;
+                        currentX = mouseX;
+                        currentY = mouseY;
+                        spotlight.classList.add('spotlight-visible');
+                    }, { passive: true });
+
+                    requestAnimationFrame(render);
+                }
+            } catch (err) {
+                // Silently ignore if cross-origin restricted
+            }
+        })();
+        </script>
+        """,
+        height=0,
+        width=0,
+    )
+
+
 def inject_css() -> None:
     st.markdown(CSS, unsafe_allow_html=True)
+    inject_cursor_spotlight()
 
 
 def hero(title: str, subtitle: str, badge: str | None = None) -> None:
