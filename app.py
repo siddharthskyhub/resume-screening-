@@ -31,10 +31,7 @@ with st.sidebar:
     st.markdown(
         '<div class="brand-container">'
         '<div class="brand-header">'
-        '<div class="brand-logo-wrap">'
-        f'<div class="brand-logo">{ui.icon("target", size=20, color="#ffffff")}</div>'
-        '<div class="brand-logo-ping"></div>'
-        '</div>'
+        f'<div class="brand-logo-wrap">{ui.brand_logo(42)}</div>'
         '<div>'
         '<div class="brand-title-row">'
         '<span class="brand-text">SkillMatch</span>'

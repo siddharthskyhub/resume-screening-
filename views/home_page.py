@@ -52,7 +52,7 @@ SHEET = (
 left, right = st.columns([6, 5], gap="large", vertical_alignment="center")
 with left:
     st.markdown(
-        f'<div class="home-hero-badge">{ui.icon("target", size=15, color="var(--primary)")} Evidence-Based Career Intelligence</div>'
+        f'<div class="home-hero-badge">{ui.brand_logo(20, inline=True)} Evidence-Based Career Intelligence</div>'
         '<div class="home-title">See which skills your resume actually proves.</div>'
         '<p class="home-sub">Traditional keyword matchers give false confidence. SkillMatch identifies whether '
         'required skills are proven by quantifiable projects, merely listed, or missing entirely — then helps you close the gaps.</p>',

@@ -453,28 +453,9 @@ input[type="text"]:focus, textarea:focus {
     color: #ffffff !important;
 }
 
-/* Single-Layer Clean Icon Box (Eliminates multi-layer ghost cascading) */
-[data-testid="stSidebarNavLink"] > span:first-child {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 30px !important;
-    height: 30px !important;
-    border-radius: 9px !important;
-    font-size: 1.1rem !important;
-    margin-right: 11px !important;
-    background: #f5edfa !important;
-    border: 1px solid #ebd9f7 !important;
-    color: #7c3aed !important;
-    box-shadow: 0 1px 2px rgba(124, 58, 237, 0.06) !important;
-    flex-shrink: 0 !important;
-    position: relative !important;
-    overflow: visible !important;
-    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.22s ease, border-color 0.22s ease, box-shadow 0.25s ease !important;
-}
-
-/* Neutralize all nested child spans so only one clean squircle exists */
-[data-testid="stSidebarNavLink"] > span:first-child span {
+/* Completely remove all stacked rounded-square elements from navigation icons */
+[data-testid="stSidebarNavLink"] span:first-child,
+[data-testid="stSidebarNavLink"] span:first-child span {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -482,34 +463,27 @@ input[type="text"]:focus, textarea:focus {
     border: none !important;
     border-radius: 0 !important;
     box-shadow: none !important;
-    margin: 0 !important;
+    margin: 0 10px 0 0 !important;
     padding: 0 !important;
     width: auto !important;
     height: auto !important;
-    transform: none !important;
+    color: #7c3aed !important;
+    font-size: 1.2rem !important;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease !important;
 }
 
-/* Modern Micro-Interaction: Smooth spring lift with subtle tilt and radiant glow */
-[data-testid="stSidebarNavLink"]:hover > span:first-child {
-    transform: translateY(-2px) rotate(-5deg) scale(1.1) !important;
-    background: linear-gradient(135deg, #ede9fe 0%, #fce7f3 100%) !important;
-    border-color: #c084fc !important;
-    color: #6d28d9 !important;
-    box-shadow: 0 4px 12px rgba(147, 51, 234, 0.24) !important;
+/* Subtle, sleek hover animation on icons without any background boxes */
+[data-testid="stSidebarNavLink"]:hover span:first-child,
+[data-testid="stSidebarNavLink"]:hover span:first-child span {
+    transform: scale(1.15) !important;
+    color: #d946ef !important;
 }
 
-/* Active Page Icon State */
-[data-testid="stSidebarNavLink"][aria-current="page"] > span:first-child {
-    background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%) !important;
-    border-color: rgba(255, 255, 255, 0.45) !important;
+/* Active Page: Icon turns pure crisp white */
+[data-testid="stSidebarNavLink"][aria-current="page"] span:first-child,
+[data-testid="stSidebarNavLink"][aria-current="page"] span:first-child span {
     color: #ffffff !important;
-    box-shadow: 0 3px 10px rgba(79, 70, 229, 0.45), 0 0 0 2px rgba(255, 255, 255, 0.3) !important;
-    transform: translateY(-1px) scale(1.04) !important;
-}
-
-[data-testid="stSidebarNavLink"][aria-current="page"]:hover > span:first-child {
-    transform: translateY(-2px) rotate(-4deg) scale(1.1) !important;
-    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.55), 0 0 0 2px rgba(255, 255, 255, 0.4) !important;
+    transform: scale(1.05) !important;
 }
 
 /* Ensure no ellipsis truncation on labels */
@@ -579,37 +553,19 @@ input[type="text"]:focus, textarea:focus {
     margin-bottom: 4px;
 }
 .brand-logo-wrap {
-    position: relative;
-    width: 44px;
-    height: 44px;
-}
-.brand-logo {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
-    border-radius: 13px;
-    color: white;
-    font-size: 1.35rem;
-    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
-    position: relative;
-    z-index: 2;
+    flex-shrink: 0;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.brand-logo-ping {
-    position: absolute;
-    inset: -3px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #4f46e5, #ec4899);
-    opacity: 0.4;
-    filter: blur(5px);
-    animation: pingSlow 3.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-    z-index: 1;
+.brand-logo-wrap:hover {
+    transform: translateY(-2px) scale(1.06);
 }
-@keyframes pingSlow {
-    0%, 100% { transform: scale(0.96); opacity: 0.3; }
-    50% { transform: scale(1.1); opacity: 0.65; }
+.brand-logo-svg {
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.22);
+    display: block;
 }
 .brand-title-row {
     display: flex;
@@ -2036,6 +1992,67 @@ def icon_label(name: str, text: str, icon_size: int = 16, color: str | None = No
     """Combine a Lucide SVG icon with text label for HTML/Markdown components."""
     svg = icon(name, size=icon_size, color=color)
     return f'<span class="inline-icon-wrap {class_name}" style="gap:{spacing}px;">{svg}<span>{esc(text)}</span></span>'
+
+
+def brand_logo(size: int = 42, inline: bool = False, class_name: str = "") -> str:
+    """Return an inline SVG of the modern SkillMatch geometric 'S' ribbon logo with purple-to-pink gradient."""
+    uid = f"sm_{size}_{abs(hash(size)) % 10000}"
+    inline_style = "vertical-align:middle; margin-right:6px;" if inline else ""
+    classes = f"brand-logo-svg {class_name}".strip()
+    return (
+        f'<svg class="{classes}" width="{size}" height="{size}" viewBox="0 0 100 100" '
+        f'style="{inline_style}" aria-label="SkillMatch AI Logo" xmlns="http://www.w3.org/2000/svg">'
+        f'<defs>'
+        f'<linearGradient id="bg_{uid}" x1="0%" y1="0%" x2="100%" y2="100%">'
+        f'<stop offset="0%" stop-color="#070a1e"/>'
+        f'<stop offset="50%" stop-color="#0a0e27"/>'
+        f'<stop offset="100%" stop-color="#0d112d"/>'
+        f'</linearGradient>'
+        f'<linearGradient id="pt_{uid}" x1="15%" y1="85%" x2="85%" y2="15%">'
+        f'<stop offset="0%" stop-color="#e879f9"/>'
+        f'<stop offset="45%" stop-color="#f472b6"/>'
+        f'<stop offset="85%" stop-color="#fbcfe8"/>'
+        f'<stop offset="100%" stop-color="#ffffff"/>'
+        f'</linearGradient>'
+        f'<linearGradient id="wt_{uid}" x1="0%" y1="0%" x2="100%" y2="100%">'
+        f'<stop offset="0%" stop-color="#c084fc"/>'
+        f'<stop offset="40%" stop-color="#e879f9"/>'
+        f'<stop offset="100%" stop-color="#f472b6"/>'
+        f'</linearGradient>'
+        f'<linearGradient id="ft_{uid}" x1="0%" y1="0%" x2="0%" y2="100%">'
+        f'<stop offset="0%" stop-color="#9333ea"/>'
+        f'<stop offset="40%" stop-color="#7c3aed"/>'
+        f'<stop offset="100%" stop-color="#4f46e5"/>'
+        f'</linearGradient>'
+        f'<linearGradient id="pb_{uid}" x1="85%" y1="15%" x2="15%" y2="85%">'
+        f'<stop offset="0%" stop-color="#e879f9"/>'
+        f'<stop offset="45%" stop-color="#f472b6"/>'
+        f'<stop offset="85%" stop-color="#fbcfe8"/>'
+        f'<stop offset="100%" stop-color="#ffffff"/>'
+        f'</linearGradient>'
+        f'<linearGradient id="wb_{uid}" x1="100%" y1="100%" x2="0%" y2="0%">'
+        f'<stop offset="0%" stop-color="#c084fc"/>'
+        f'<stop offset="40%" stop-color="#e879f9"/>'
+        f'<stop offset="100%" stop-color="#f472b6"/>'
+        f'</linearGradient>'
+        f'<linearGradient id="fb_{uid}" x1="0%" y1="100%" x2="0%" y2="0%">'
+        f'<stop offset="0%" stop-color="#9333ea"/>'
+        f'<stop offset="40%" stop-color="#7c3aed"/>'
+        f'<stop offset="100%" stop-color="#4f46e5"/>'
+        f'</linearGradient>'
+        f'</defs>'
+        f'<rect width="100" height="100" rx="26" fill="url(#bg_{uid})"/>'
+        f'<rect width="98" height="98" x="1" y="1" rx="25" fill="none" stroke="rgba(255,255,255,0.09)" stroke-width="1.2"/>'
+        f'<g>'
+        f'<path d="M26,50 C26,34 32,22 45,22 L45,37 C37,37 36,43 36,50 Z" fill="url(#pt_{uid})"/>'
+        f'<path d="M45,22 L57,22 L57,37 L45,37 Z" fill="url(#ft_{uid})"/>'
+        f'<path d="M57,22 L74,37 L57,37 Z" fill="url(#wt_{uid})"/>'
+        f'<path d="M74,50 C74,66 68,78 55,78 L55,63 C63,63 64,57 64,50 Z" fill="url(#pb_{uid})"/>'
+        f'<path d="M55,78 L43,78 L43,63 L55,63 Z" fill="url(#fb_{uid})"/>'
+        f'<path d="M43,78 L26,63 L43,63 Z" fill="url(#wb_{uid})"/>'
+        f'</g>'
+        f'</svg>'
+    )
 
 
 def inject_cursor_spotlight() -> None:
