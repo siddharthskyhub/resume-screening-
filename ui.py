@@ -453,36 +453,63 @@ input[type="text"]:focus, textarea:focus {
     color: #ffffff !important;
 }
 
-/* Clean Icon Squircle Box without nested ghost borders */
-[data-testid="stSidebarNavLink"] span:first-child {
+/* Single-Layer Clean Icon Box (Eliminates multi-layer ghost cascading) */
+[data-testid="stSidebarNavLink"] > span:first-child {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 28px !important;
-    height: 28px !important;
-    border-radius: 8px !important;
-    font-size: 1.05rem !important;
-    margin-right: 10px !important;
-    background: #f8f4fc !important;
-    border: 1px solid #ede3f8 !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 9px !important;
+    font-size: 1.1rem !important;
+    margin-right: 11px !important;
+    background: #f5edfa !important;
+    border: 1px solid #ebd9f7 !important;
     color: #7c3aed !important;
-    box-shadow: none !important;
+    box-shadow: 0 1px 2px rgba(124, 58, 237, 0.06) !important;
     flex-shrink: 0 !important;
-    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    position: relative !important;
+    overflow: visible !important;
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.22s ease, border-color 0.22s ease, box-shadow 0.25s ease !important;
 }
 
-[data-testid="stSidebarNavLink"]:hover span:first-child {
-    transform: scale(1.06) !important;
-    background: #f3e8ff !important;
-    border-color: #d8b4fe !important;
+/* Neutralize all nested child spans so only one clean squircle exists */
+[data-testid="stSidebarNavLink"] > span:first-child span {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    transform: none !important;
+}
+
+/* Modern Micro-Interaction: Smooth spring lift with subtle tilt and radiant glow */
+[data-testid="stSidebarNavLink"]:hover > span:first-child {
+    transform: translateY(-2px) rotate(-5deg) scale(1.1) !important;
+    background: linear-gradient(135deg, #ede9fe 0%, #fce7f3 100%) !important;
+    border-color: #c084fc !important;
     color: #6d28d9 !important;
+    box-shadow: 0 4px 12px rgba(147, 51, 234, 0.24) !important;
 }
 
-[data-testid="stSidebarNavLink"][aria-current="page"] span:first-child {
-    background: #6366f1 !important;
-    border-color: #4f46e5 !important;
+/* Active Page Icon State */
+[data-testid="stSidebarNavLink"][aria-current="page"] > span:first-child {
+    background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%) !important;
+    border-color: rgba(255, 255, 255, 0.45) !important;
     color: #ffffff !important;
-    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35) !important;
+    box-shadow: 0 3px 10px rgba(79, 70, 229, 0.45), 0 0 0 2px rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(-1px) scale(1.04) !important;
+}
+
+[data-testid="stSidebarNavLink"][aria-current="page"]:hover > span:first-child {
+    transform: translateY(-2px) rotate(-4deg) scale(1.1) !important;
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.55), 0 0 0 2px rgba(255, 255, 255, 0.4) !important;
 }
 
 /* Ensure no ellipsis truncation on labels */
