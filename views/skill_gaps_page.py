@@ -35,9 +35,9 @@ def heatmap_html(analysis: dict, max_rows: int = 25) -> str:
     rows = []
     for row in analysis["skills"][:max_rows]:
         css, symbol = {
-            "missing": ("hm-missing", "✕"),
-            "listed": ("hm-listed", "●"),
-        }.get(row["status"], ("hm-ok", "✓"))
+            "missing": ("hm-missing", ui.icon("x", size=12, color="currentColor")),
+            "listed": ("hm-listed", ui.icon("circle-dot", size=10, color="currentColor")),
+        }.get(row["status"], ("hm-ok", ui.icon("check", size=12, color="currentColor")))
 
         cells = [f"<td><b>{html.escape(row['skill'])}</b></td>"]
         for name in names:
@@ -52,7 +52,12 @@ def heatmap_html(analysis: dict, max_rows: int = 25) -> str:
                 )
         rows.append("<tr>" + "".join(cells) + "</tr>")
 
-    scroll_hint = '<div style="font-size:0.78rem; color:var(--muted); margin-bottom:6px;">💡 Swipe or scroll horizontally on smaller screens to view all jobs. First column stays pinned.</div>'
+    scroll_hint = (
+        f'<div style="font-size:0.78rem; color:var(--muted); margin-bottom:6px; display:flex; align-items:center; gap:6px;">'
+        f'<span class="inline-icon-wrap">{ui.icon("help-circle", size=13, color="var(--muted)")}</span> '
+        f'<span>Swipe or scroll horizontally on smaller screens to view all jobs. First column stays pinned.</span>'
+        f'</div>'
+    )
     return (
         f'{scroll_hint}'
         f'<div class="hm-wrap"><table class="hm"><thead><tr>{head}</tr></thead><tbody>'
@@ -76,7 +81,7 @@ col_gap_head, col_gap_sample = st.columns([3, 2], vertical_alignment="center")
 with col_gap_head:
     st.caption("Compare up to 10 job descriptions to reveal recurring industry requirements.")
 with col_gap_sample:
-    if st.button("💼 Add sample demo job (1-click)", key="btn_sample_gap_job"):
+    if st.button("Add sample demo job (1-click)", icon=":material/work:", key="btn_sample_gap_job"):
         jobs["CloudScale AI – Senior Backend"] = ui.SAMPLE_JOB_DESCRIPTION
         st.rerun()
 
@@ -88,7 +93,7 @@ with col_form:
         with st.form("add_job", clear_on_submit=True):
             name = st.text_input("Job / Company Identifier", placeholder="e.g. Acme – Backend Engineer")
             text = st.text_area("Job Description Requirements", height=140, placeholder="Paste job description requirements...")
-            if st.form_submit_button("➕ Add Job to Matrix", use_container_width=True):
+            if st.form_submit_button("Add Job to Matrix", icon=":material/add:", use_container_width=True):
                 if not name.strip() or not text.strip():
                     st.error("Please enter both a name and a job description.")
                 elif len(jobs) >= MAX_JOBS:
@@ -108,7 +113,7 @@ with col_import:
                 options[label] = app["job_description"]
         chosen = st.multiselect("Select tracked jobs with descriptions", list(options),
                                 help="Only tracked applications with a saved description appear here.")
-        if st.button("📥 Import Selected Jobs", disabled=not chosen, use_container_width=True):
+        if st.button("Import Selected Jobs", icon=":material/download:", disabled=not chosen, use_container_width=True):
             for label in chosen:
                 if len(jobs) < MAX_JOBS:
                     jobs[label] = options[label]
@@ -121,7 +126,7 @@ if jobs:
         with c1:
             st.markdown(
                 f'<div style="background:#ffffff; border:1px solid var(--line); border-radius:8px; padding:8px 14px; display:flex; justify-content:space-between; align-items:center;">'
-                f'<span>💼 <b>{ui.md_escape(job_name)}</b></span>'
+                f'<span style="display:flex; align-items:center; gap:8px;"><span class="inline-icon-wrap">{ui.icon("briefcase", size=14, color="var(--primary)")}</span><b>{ui.md_escape(job_name)}</b></span>'
                 f'<span style="font-size:0.8rem; color:var(--muted);">{len(jobs[job_name].split())} words</span>'
                 f'</div>',
                 unsafe_allow_html=True,
@@ -135,10 +140,10 @@ if jobs:
         st.rerun()
 
 if not resume_text:
-    st.info("👆 Load your resume above to see your personalized skill gap matrix.")
+    st.info("Load your resume above to see your personalized skill gap matrix.", icon=":material/info:")
     st.stop()
 if not jobs:
-    st.info("👆 Add at least one target job above to get started. Comparing 3 to 5 jobs provides the clearest market insight.")
+    st.info("Add at least one target job above to get started. Comparing 3 to 5 jobs provides the clearest market insight.", icon=":material/info:")
     st.stop()
 
 analysis = analyze_jobs(resume_text, jobs)
@@ -175,12 +180,20 @@ st.dataframe(
 st.markdown("### Gaps to Close First")
 st.caption("Ranked by frequency across your target jobs, employer requirement level, and your current resume evidence.")
 if not analysis["gaps"]:
-    st.success("🎉 Spectacular! Every skill requested across these target jobs is backed by verifiable evidence on your resume.")
+    st.success("Spectacular! Every skill requested across these target jobs is backed by verifiable evidence on your resume.", icon=":material/verified:")
 else:
     st.markdown(ui.legend(), unsafe_allow_html=True)
     st.markdown(ui.demand_rows(analysis["gaps"][:8]), unsafe_allow_html=True)
-    st.page_link("views/roadmap_page.py", label="🗺️ Turn these gaps into a Learning Roadmap", use_container_width=True)
+    st.page_link("views/roadmap_page.py", label="Turn these gaps into a Learning Roadmap", icon=":material/map:", use_container_width=True)
 
 st.markdown("### Comprehensive Skill Heatmap")
 st.markdown(heatmap_html(analysis), unsafe_allow_html=True)
-st.caption("Key: ✓ Proven on resume · ● Listed without proof · ✕ Missing · Faded icons represent optional/nice-to-have requirements · Dashes represent skills not mentioned in that job.")
+st.markdown(
+    f'<div style="font-size:0.8rem; color:var(--muted); margin-top:8px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;">'
+    f'<span style="display:inline-flex; align-items:center; gap:4px;">{ui.icon("check", size=12, color="#10b981")} Proven on resume</span>'
+    f'<span style="display:inline-flex; align-items:center; gap:4px;">{ui.icon("circle-dot", size=10, color="#f59e0b")} Listed without proof</span>'
+    f'<span style="display:inline-flex; align-items:center; gap:4px;">{ui.icon("x", size=12, color="#f43f5e")} Missing</span>'
+    f'<span>· Faded icons represent optional requirements · Dashes represent unmentioned skills</span>'
+    f'</div>',
+    unsafe_allow_html=True,
+)

@@ -34,7 +34,7 @@ STEPS = [
 SHEET = (
     '<div class="sheet">'
     '<div class="sheet-doc-header">'
-    '<div class="sheet-doc-title">📄 Sample Candidate Resume</div>'
+    f'<div class="sheet-doc-title">{ui.icon("file-text", size=16, color="var(--primary)")} Sample Candidate Resume</div>'
     '<span class="sheet-doc-status">Interactive Preview</span>'
     '</div>'
     '<div class="sheet-h">Technical Skills</div>'
@@ -52,7 +52,7 @@ SHEET = (
 left, right = st.columns([6, 5], gap="large", vertical_alignment="center")
 with left:
     st.markdown(
-        '<div class="home-hero-badge">🎯 Evidence-Based Career Intelligence</div>'
+        f'<div class="home-hero-badge">{ui.icon("target", size=15, color="var(--primary)")} Evidence-Based Career Intelligence</div>'
         '<div class="home-title">See which skills your resume actually proves.</div>'
         '<p class="home-sub">Traditional keyword matchers give false confidence. SkillMatch identifies whether '
         'required skills are proven by quantifiable projects, merely listed, or missing entirely — then helps you close the gaps.</p>',
@@ -60,13 +60,13 @@ with left:
     )
     c_action1, c_action2, c_action3 = st.columns([1.2, 1.1, 1.3], gap="small")
     with c_action1:
-        if st.button("🚀 Analyze resume", type="primary", use_container_width=True):
+        if st.button("Analyze resume", icon=":material/rocket_launch:", type="primary", use_container_width=True):
             st.switch_page("views/analyzer_page.py")
     with c_action2:
-        if st.button("⚡ ATS Checker", use_container_width=True):
+        if st.button("ATS Checker", icon=":material/verified_user:", use_container_width=True):
             st.switch_page("views/ats_checker_page.py")
     with c_action3:
-        if st.button("✨ 1-Click Demo", key="btn_home_sample_demo", use_container_width=True):
+        if st.button("1-Click Demo", icon=":material/auto_awesome:", key="btn_home_sample_demo", use_container_width=True):
             ui.load_sample_data()
             st.switch_page("views/analyzer_page.py")
 with right:
@@ -109,7 +109,11 @@ cards_html.append("</div>")
 
 st.markdown("".join(cards_html), unsafe_allow_html=True)
 
-st.caption(
-    "🔒 Privacy guarantee: Your resume is processed in local memory and is never saved to external databases. "
-    "Only applications you choose to track are stored, locally on your computer."
+st.markdown(
+    f'<div style="font-size:0.82rem; color:var(--muted); margin-top:12px; display:flex; align-items:flex-start; gap:6px;">'
+    f'<span class="inline-icon-wrap" style="flex-shrink:0; margin-top:2px;">{ui.icon("lock", size=13, color="var(--muted)")}</span>'
+    f'<span>Privacy guarantee: Your resume is processed in local memory and is never saved to external databases. '
+    f'Only applications you choose to track are stored, locally on your computer.</span>'
+    f'</div>',
+    unsafe_allow_html=True,
 )

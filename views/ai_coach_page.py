@@ -41,7 +41,7 @@ with right:
     with c_ai_job_title:
         st.markdown("#### 2. Target Job")
     with c_ai_job_sample:
-        if st.button("💼 Load sample job (1-click)", key="btn_sample_job_ai"):
+        if st.button("Load sample job (1-click)", icon=":material/work:", key="btn_sample_job_ai"):
             ui.load_sample_job()
 
     # Same key as the Analyzer page, so the job description is shared between them.
@@ -51,7 +51,7 @@ with right:
     )
 
 # ------------------------------ Ollama setup -------------------------------- #
-with st.expander("⚙️ Local Ollama AI Settings & Status", expanded=not st.session_state.get("_ollama_ok")):
+with st.expander("Local Ollama AI Settings & Status", expanded=not st.session_state.get("_ollama_ok")):
     host = st.text_input("Ollama Server Address", value=ai.normalize_host(None), key="ollama_host")
     models, error = check_ollama(host)
     st.session_state["_ollama_ok"] = error is None
@@ -59,7 +59,8 @@ with st.expander("⚙️ Local Ollama AI Settings & Status", expanded=not st.ses
     if error:
         st.markdown(
             f'<div style="background:var(--red-bg); border:1px solid var(--red-border); border-radius:8px; padding:12px 16px; margin:8px 0; color:var(--red-text); font-size:0.9rem;">'
-            f'⚠️ <b>Ollama connection issue:</b> {ui.esc(error)}'
+            f'<div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;"><span class="inline-icon-wrap">{ui.icon("alert-triangle", size=16, color="var(--red-text)")}</span><b>Ollama connection issue:</b></div>'
+            f'{ui.esc(error)}'
             f'</div>',
             unsafe_allow_html=True,
         )
@@ -77,7 +78,7 @@ with st.expander("⚙️ Local Ollama AI Settings & Status", expanded=not st.ses
     else:
         st.markdown(
             f'<div style="background:var(--green-bg); border:1px solid var(--green-border); border-radius:8px; padding:10px 14px; margin-bottom:12px; color:var(--green-text); font-size:0.9rem; display:flex; align-items:center; gap:8px;">'
-            f'<span>🟢</span> <b>Ollama is connected and running locally.</b> Resumes are processed in private memory.'
+            f'<span class="inline-icon-wrap">{ui.icon("check-circle-2", size=16, color="var(--green-text)")}</span> <b>Ollama is connected and running locally.</b> Resumes are processed in private memory.'
             f'</div>',
             unsafe_allow_html=True,
         )
@@ -90,12 +91,12 @@ with st.expander("⚙️ Local Ollama AI Settings & Status", expanded=not st.ses
         with c2:
             embed_model = pick("Embedding Model", embedding_models, default_embed, "embed_model")
         if not chat_models:
-            st.warning("No chat model installed. Run `ollama pull llama3.2` in your terminal.")
+            st.warning("No chat model installed. Run `ollama pull llama3.2` in your terminal.", icon=":material/warning:")
 
 if error:
     st.stop()
 if not resume_text:
-    st.info("👆 Please upload or paste your resume above to begin using the AI Coach.")
+    st.info("Please upload or paste your resume above to begin using the AI Coach.", icon=":material/info:")
     st.stop()
 
 client = OllamaClient(host, timeout=180)
@@ -108,14 +109,14 @@ def llm(system: str, user: str, temperature: float = 0.2) -> str:
 def need_job() -> bool:
     if job_text.strip():
         return False
-    st.info("👆 Paste a target job description above to unlock this tool.")
+    st.info("Paste a target job description above to unlock this tool.", icon=":material/info:")
     return True
 
 
 analysis = analyze_resume(resume_text, job_text) if job_text.strip() else None
 
 tab_rewrite, tab_semantic, tab_summary, tab_interview = st.tabs(
-    ["✍️ Fact-Checked Bullet Rewriter", "🔍 Semantic Matching", "📋 Plain-Language Fit Summary", "🎯 Tailored Interview Prep"]
+    ["Fact-Checked Bullet Rewriter", "Semantic Matching", "Plain-Language Fit Summary", "Tailored Interview Prep"]
 )
 
 # ------------------------------ bullet rewriter ------------------------------ #
@@ -132,7 +133,7 @@ with tab_rewrite:
     custom = st.text_area("…or paste a specific bullet to rewrite", height=80, key="custom_bullet", placeholder="e.g. Developed API endpoints for our user onboarding process.")
     bullet = custom.strip() or choice
 
-    if st.button("✨ Generate Fact-Checked Rewrite", type="primary", disabled=not bullet or not chat_model):
+    if st.button("Generate Fact-Checked Rewrite", icon=":material/auto_awesome:", type="primary", disabled=not bullet or not chat_model):
         targets = list(analysis["job"])[:10] if analysis else []
         try:
             with st.spinner("Analyzing context and polishing bullet..."):
@@ -154,11 +155,11 @@ with tab_rewrite:
                 st.code(result["rewrite"], language=None)
         if result["problems"]:
             for problem in result["problems"]:
-                st.warning(f"⚠️ Fact-check alert: {problem}")
+                st.warning(f"Fact-check alert: {problem}", icon=":material/warning:")
         else:
-            st.success("✅ Passed strict fact check: No unverified claims, skills, or metrics added.")
+            st.success("Passed strict fact check: No unverified claims, skills, or metrics added.", icon=":material/verified:")
         if "[" in result["rewrite"]:
-            st.info("💡 Tip: Replace each bracketed [placeholder] with your genuine metrics, or remove it.")
+            st.info("Tip: Replace each bracketed [placeholder] with your genuine metrics, or remove it.", icon=":material/lightbulb:")
 
 # ------------------------------ semantic matching ----------------------------- #
 with tab_semantic:
@@ -171,7 +172,7 @@ with tab_semantic:
     )
     if not need_job():
         if not embed_model:
-            st.warning("No embedding model installed. Run `ollama pull nomic-embed-text` in your terminal.")
+            st.warning("No embedding model installed. Run `ollama pull nomic-embed-text` in your terminal.", icon=":material/warning:")
         else:
             with st.expander("Model Match Sensitivity Thresholds"):
                 c_s1, c_s2 = st.columns(2)
@@ -184,7 +185,7 @@ with tab_semantic:
             items = ai.candidate_bullets(resume_text)
             st.caption(f"Detected {len(requirements)} requirements from job description · {len(items)} bullets from resume")
 
-            if st.button("⚡ Run Semantic Embeddings Analysis", type="primary", disabled=not requirements or not items or partial >= strong):
+            if st.button("Run Semantic Embeddings Analysis", icon=":material/bolt:", type="primary", disabled=not requirements or not items or partial >= strong):
                 try:
                     with st.spinner("Computing high-dimensional text embeddings..."):
                         st.session_state["ai_semantic"] = ai.semantic_match(
@@ -194,7 +195,7 @@ with tab_semantic:
                 except OllamaError as exc:
                     st.error(str(exc))
             if partial >= strong:
-                st.warning("Partial threshold must be lower than strong threshold.")
+                st.warning("Partial threshold must be lower than strong threshold.", icon=":material/warning:")
 
             semantic = st.session_state.get("ai_semantic")
             if semantic:
@@ -240,8 +241,8 @@ with tab_summary:
     )
     if not need_job():
         if analysis["score"] is None:
-            st.warning("No supported skills were detected in this job description.")
-        elif st.button("📝 Synthesize Fit Summary", type="primary", disabled=not chat_model):
+            st.warning("No supported skills were detected in this job description.", icon=":material/warning:")
+        elif st.button("Synthesize Fit Summary", icon=":material/description:", type="primary", disabled=not chat_model):
             try:
                 with st.spinner("Writing objective fit overview..."):
                     st.session_state["ai_summary"] = ai.fit_summary(analysis, llm)
@@ -252,7 +253,7 @@ with tab_summary:
         if summary:
             if summary["problems"]:
                 for problem in summary["problems"]:
-                    st.warning(f"Note: {problem}")
+                    st.warning(f"Note: {problem}", icon=":material/warning:")
             with st.container(border=True):
                 st.markdown(summary["summary"])
             st.caption("Generated strictly from deterministic skill evidence. Your match scores are unaltered.")
@@ -272,7 +273,7 @@ with tab_interview:
         with c_q1:
             count = st.slider("Target Number of Questions", 3, 10, 5)
         with c_q2:
-            gen_btn = st.button("🎯 Generate Prep Questions", type="primary", disabled=not chat_model, use_container_width=True)
+            gen_btn = st.button("Generate Prep Questions", icon=":material/quiz:", type="primary", disabled=not chat_model, use_container_width=True)
 
         if gen_btn:
             try:
@@ -296,4 +297,10 @@ with tab_interview:
             for number, question in enumerate(questions["questions"], start=1):
                 with st.container(border=True):
                     st.markdown(f"**Q{number}:** {ui.md_escape(question)}")
-            st.caption("💡 Best practice: When addressing skills you currently lack, articulate your conceptual foundation and reference your learning roadmap.")
+            st.markdown(
+                f'<div style="font-size:0.82rem; color:var(--muted); margin-top:8px; display:flex; align-items:flex-start; gap:6px;">'
+                f'<span class="inline-icon-wrap" style="flex-shrink:0; margin-top:2px;">{ui.icon("lightbulb", size=13, color="var(--primary)")}</span>'
+                f'<span>Best practice: When addressing skills you currently lack, articulate your conceptual foundation and reference your learning roadmap.</span>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )

@@ -48,7 +48,12 @@ def render_card(app: dict) -> None:
             )
 
         if app["applied_date"]:
-            st.caption(f"📅 Applied {app['applied_date']}")
+            st.markdown(
+                f'<div style="font-size:0.78rem; color:var(--muted); display:flex; align-items:center; gap:4px; margin-bottom:6px;">'
+                f'<span class="inline-icon-wrap">{ui.icon("calendar", size=12, color="var(--muted)")}</span> Applied {app["applied_date"]}'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
 
         st.selectbox(
             "Move to", STATUSES, index=STATUSES.index(app["status"]),
@@ -58,7 +63,13 @@ def render_card(app: dict) -> None:
 
         with st.expander("Details & Notes"):
             if app["url"] and app["url"].startswith(("http://", "https://")):
-                st.markdown(f"🔗 [Open Original Job Posting]({app['url']})")
+                st.markdown(
+                    f'<div style="margin-bottom:6px;">'
+                    f'<a href="{app["url"]}" target="_blank" style="display:inline-flex; align-items:center; gap:4px; font-size:0.86rem; color:var(--primary); font-weight:600; text-decoration:none;">'
+                    f'{ui.icon("external-link", size=13, color="var(--primary)")} Open Original Job Posting'
+                    f'</a></div>',
+                    unsafe_allow_html=True,
+                )
             if app["missing"]:
                 missing_chips = " ".join([ui.chip(m, "missing") for m in app["missing"][:6]])
                 st.markdown(
@@ -82,12 +93,12 @@ def render_card(app: dict) -> None:
                 if c_del_no.button("Cancel", key=f"no_{app_id}", use_container_width=True):
                     st.session_state.pop(f"confirm_{app_id}", None)
                     st.rerun()
-            elif st.button("🗑️ Delete", key=f"del_{app_id}", use_container_width=True):
+            elif st.button("Delete", icon=":material/delete:", key=f"del_{app_id}", use_container_width=True):
                 st.session_state[f"confirm_{app_id}"] = True
                 st.rerun()
 
 
-with st.expander("➕ Track a New Application", expanded=not apps):
+with st.expander("Track a New Application", expanded=not apps):
     with st.form("add_application", clear_on_submit=True):
         c1, c2 = st.columns(2)
         company = c1.text_input("Company Name *", placeholder="e.g. Acme Corp")
@@ -101,7 +112,7 @@ with st.expander("➕ Track a New Application", expanded=not apps):
             placeholder="Paste job description requirements here...",
         )
         notes = st.text_area("Initial Notes (optional)", height=70, placeholder="Interview notes, contacts...")
-        submitted = st.form_submit_button("Save Application to Tracker", use_container_width=True)
+        submitted = st.form_submit_button("Save Application to Tracker", icon=":material/bookmark_add:", use_container_width=True)
 
     if submitted:
         if not company.strip() or not role.strip():
@@ -118,13 +129,13 @@ with st.expander("➕ Track a New Application", expanded=not apps):
                     job_description=job_description, score=score,
                     evidence_score=evidence_score, missing=missing,
                 )
-                st.session_state["_flash"] = f"🎉 Successfully added {company.strip()} – {role.strip()} to your tracker."
+                st.session_state["_flash"] = f"Successfully added {company.strip()} – {role.strip()} to your tracker."
                 st.rerun()
             except ValueError as error:
                 st.error(str(error))
 
 if not apps:
-    st.info("No applications yet. Add your first one above or save one directly from the Analyzer page.")
+    st.info("No applications yet. Add your first one above or save one directly from the Analyzer page.", icon=":material/info:")
     st.stop()
 
 # Status overview stats
@@ -134,10 +145,11 @@ st.markdown(ui.stat_row([(status, counts[status]) for status in STATUSES]), unsa
 insights = tracker.score_insights()
 if insights:
     st.markdown(
-        f'<div style="background:var(--primary-light); border:1px solid var(--primary-border); border-radius:10px; padding:12px 18px; margin-bottom:16px; color:var(--ink); font-size:0.92rem;">'
-        f'📊 <b>Match Score Insight:</b> Applications reaching interview/offer stages averaged a <b>{insights["advanced_avg"]}%</b> match '
+        f'<div style="background:var(--primary-light); border:1px solid var(--primary-border); border-radius:10px; padding:12px 18px; margin-bottom:16px; color:var(--ink); font-size:0.92rem; display:flex; align-items:flex-start; gap:10px;">'
+        f'<span class="inline-icon-wrap" style="color:var(--primary); margin-top:2px;">{ui.icon("trending-up", size=18, color="var(--primary)")}</span>'
+        f'<div><b>Match Score Insight:</b> Applications reaching interview/offer stages averaged a <b>{insights["advanced_avg"]}%</b> match '
         f'({insights["advanced_n"]} applications), compared to <b>{insights["rejected_avg"]}%</b> for rejected applications '
-        f'({insights["rejected_n"]} applications).'
+        f'({insights["rejected_n"]} applications).</div>'
         f'</div>',
         unsafe_allow_html=True,
     )
@@ -147,12 +159,12 @@ st.divider()
 # Responsive View Selector (Board vs Stage Tabs)
 view_mode = st.radio(
     "Tracker View Layout",
-    ["📋 Kanban Board (Desktop)", "📑 Stage Tabs (Mobile & Tablet Friendly)"],
+    ["Kanban Board (Desktop)", "Stage Tabs (Mobile & Tablet Friendly)"],
     horizontal=True,
     label_visibility="collapsed",
 )
 
-if view_mode.startswith("📋"):
+if view_mode.startswith("Kanban"):
     # Multi-column Kanban Board layout
     cols = st.columns(len(STATUSES))
     for column, status in zip(cols, STATUSES):

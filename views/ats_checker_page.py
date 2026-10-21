@@ -20,7 +20,7 @@ with right_input:
     with c_ats_job_title:
         st.markdown("#### 2. Target Job (Optional)")
     with c_ats_job_sample:
-        if st.button("💼 Load sample job (1-click)", key="btn_sample_job_ats"):
+        if st.button("Load sample job (1-click)", icon=":material/work:", key="btn_sample_job_ats"):
             ui.load_sample_job()
 
     job_text = ui.persistent(
@@ -35,14 +35,14 @@ with right_input:
     st.caption("Optional: Adding a job description enables ATS keyword match analysis.")
 
 if not resume_text:
-    st.info("👆 Please upload or paste your resume above to run the ATS compliance audit.")
+    st.info("Please upload or paste your resume above to run the ATS compliance audit.", icon=":material/info:")
     st.stop()
 
 # Auto-run or button
 st.write("")
 col_btn, _ = st.columns([1, 2])
 with col_btn:
-    run_audit = st.button("⚡ Run ATS Compliance Audit", type="primary", use_container_width=True)
+    run_audit = st.button("Run ATS Compliance Audit", icon=":material/verified_user:", type="primary", use_container_width=True)
 
 if run_audit or "ats_audit_result" not in st.session_state:
     st.session_state["ats_audit_result"] = check_ats(resume_text, job_text)
@@ -106,7 +106,7 @@ st.markdown(
 
 # ----------------------------- Breakdown Tabs ------------------------------ #
 tab_checklist, tab_contacts, tab_verbs, tab_alignment = st.tabs(
-    ["📋 Compliance Checklist", "👤 Contact & Structure", "⚡ Action Verbs & Tone", "🎯 Job Keyword Match"]
+    ["Compliance Checklist", "Contact & Structure", "Action Verbs & Tone", "Job Keyword Match"]
 )
 
 with tab_checklist:
@@ -118,18 +118,18 @@ with tab_checklist:
         cat_checks = [c for c in audit["checks"] if c["category"] == cat]
         for c in cat_checks:
             if c["status"] == "pass":
-                icon = '<span style="color:#10b981; font-weight:800; margin-right:6px;">✓</span>'
+                icon = f'<span class="inline-icon-wrap" style="color:#10b981; margin-right:8px; display:inline-flex; align-items:center;">{ui.icon("check-circle-2", size=16, color="#10b981")}</span>'
                 badge = f'<span style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">{c["points"]}/{c["max_points"]} pts</span>'
             elif c["status"] == "warning":
-                icon = '<span style="color:#f59e0b; font-weight:800; margin-right:6px;">●</span>'
+                icon = f'<span class="inline-icon-wrap" style="color:#f59e0b; margin-right:8px; display:inline-flex; align-items:center;">{ui.icon("alert-circle", size=16, color="#f59e0b")}</span>'
                 badge = f'<span style="background:#fffbeb; color:#b45309; border:1px solid #fde68a; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">{c["points"]}/{c["max_points"]} pts</span>'
             else:
-                icon = '<span style="color:#f43f5e; font-weight:800; margin-right:6px;">✕</span>'
+                icon = f'<span class="inline-icon-wrap" style="color:#f43f5e; margin-right:8px; display:inline-flex; align-items:center;">{ui.icon("x-circle", size=16, color="#f43f5e")}</span>'
                 badge = f'<span style="background:#fff1f2; color:#be123c; border:1px solid #fecdd3; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">{c["points"]}/{c["max_points"]} pts</span>'
 
             st.markdown(
                 f'<div style="background:#ffffff; border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">'
-                f'<div>{icon}<b>{c["name"]}</b><div style="color:var(--muted); font-size:0.88rem; margin-top:2px;">{c["detail"]}</div></div>'
+                f'<div style="display:flex; align-items:flex-start;">{icon}<div><b>{c["name"]}</b><div style="color:var(--muted); font-size:0.88rem; margin-top:2px;">{c["detail"]}</div></div></div>'
                 f'<div>{badge}</div>'
                 f'</div>',
                 unsafe_allow_html=True,
@@ -184,7 +184,13 @@ with tab_verbs:
         st.caption("No standard strong action verbs detected at the beginning of bullets.")
 
     if v["weak_phrases_found"]:
-        st.markdown("##### ⚠️ Passive Phrases to Rephrase")
+        st.markdown(
+            f'<div style="display:flex; align-items:center; gap:6px; margin:14px 0 6px;">'
+            f'<span class="inline-icon-wrap">{ui.icon("alert-triangle", size=16, color="#f59e0b")}</span>'
+            f'<h5 style="margin:0;">Passive Phrases to Rephrase</h5>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
         st.caption("Replace passive language with decisive accomplishment verbs.")
         for p in v["weak_phrases_found"]:
             st.markdown(
@@ -195,7 +201,13 @@ with tab_verbs:
             )
 
     if v["buzzwords_found"]:
-        st.markdown("##### ⚠️ Overused Clichés & Buzzwords")
+        st.markdown(
+            f'<div style="display:flex; align-items:center; gap:6px; margin:14px 0 6px;">'
+            f'<span class="inline-icon-wrap">{ui.icon("alert-triangle", size=16, color="#f43f5e")}</span>'
+            f'<h5 style="margin:0;">Overused Clichés &amp; Buzzwords</h5>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
         st.caption("Hiring managers and modern algorithms prefer concrete achievements over subjective claims.")
         for b in v["buzzwords_found"]:
             st.markdown(
@@ -245,7 +257,8 @@ with tab_alignment:
 # -------------------------- Download Report -------------------------------- #
 st.write("")
 st.download_button(
-    "📥 Download Full ATS Audit Report (TXT)",
+    "Download Full ATS Audit Report (TXT)",
+    icon=":material/download:",
     data=build_ats_report(audit),
     file_name="skillmatch_ats_audit_report.txt",
     mime="text/plain",

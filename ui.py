@@ -453,7 +453,7 @@ input[type="text"]:focus, textarea:focus {
     color: #ffffff !important;
 }
 
-/* Icon Squircle Box */
+/* Clean Icon Squircle Box without nested ghost borders */
 [data-testid="stSidebarNavLink"] span:first-child {
     display: inline-flex !important;
     align-items: center !important;
@@ -461,72 +461,76 @@ input[type="text"]:focus, textarea:focus {
     width: 28px !important;
     height: 28px !important;
     border-radius: 8px !important;
-    font-size: 1.12rem !important;
+    font-size: 1.05rem !important;
     margin-right: 10px !important;
-    background: #f1f5f9 !important;
-    border: 1px solid #e2e8f0 !important;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    background: #f8f4fc !important;
+    border: 1px solid #ede3f8 !important;
+    color: #7c3aed !important;
+    box-shadow: none !important;
     flex-shrink: 0 !important;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 [data-testid="stSidebarNavLink"]:hover span:first-child {
-    transform: scale(1.18) rotate(-6deg) !important;
-    background: #e0e7ff !important;
-    border-color: #c7d2fe !important;
-    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25) !important;
+    transform: scale(1.06) !important;
+    background: #f3e8ff !important;
+    border-color: #d8b4fe !important;
+    color: #6d28d9 !important;
 }
 
 [data-testid="stSidebarNavLink"][aria-current="page"] span:first-child {
-    background: rgba(255, 255, 255, 0.22) !important;
-    border-color: rgba(255, 255, 255, 0.4) !important;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
-    transform: scale(1.08) !important;
+    background: #6366f1 !important;
+    border-color: #4f46e5 !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35) !important;
 }
 
-/* Creative Badges on Navigation Links */
-@keyframes badgeShimmer {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+/* Ensure no ellipsis truncation on labels */
+[data-testid="stSidebarNavLink"] span:not(:first-child),
+[data-testid="stSidebarNavLink"] p {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
 }
 
+/* Professional SaaS Badges on Navigation Links without text emojis */
 [data-testid="stSidebarNavLink"][href*="ats-checker"]::after {
-    content: "AUDIT ⚡" !important;
+    content: "AUDIT" !important;
     margin-left: auto !important;
-    font-size: 0.62rem !important;
+    font-size: 0.6rem !important;
     font-weight: 800 !important;
     padding: 2px 7px !important;
     border-radius: 9999px !important;
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
     color: #ffffff !important;
-    letter-spacing: 0.04em !important;
-    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35) !important;
-    animation: badgeShimmer 2.2s infinite ease-in-out !important;
+    letter-spacing: 0.05em !important;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3) !important;
 }
 
 [data-testid="stSidebarNavLink"][href*="analyzer"]::after {
-    content: "POPULAR 🔥" !important;
+    content: "POPULAR" !important;
     margin-left: auto !important;
-    font-size: 0.62rem !important;
+    font-size: 0.6rem !important;
     font-weight: 800 !important;
     padding: 2px 7px !important;
     border-radius: 9999px !important;
     background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
     color: #ffffff !important;
-    letter-spacing: 0.04em !important;
-    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.35) !important;
+    letter-spacing: 0.05em !important;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3) !important;
 }
 
 [data-testid="stSidebarNavLink"][href*="ai-coach"]::after {
-    content: "AI 🤖" !important;
+    content: "AI PRO" !important;
     margin-left: auto !important;
-    font-size: 0.62rem !important;
+    font-size: 0.6rem !important;
     font-weight: 800 !important;
     padding: 2px 7px !important;
     border-radius: 9999px !important;
     background: linear-gradient(135deg, #ec4899 0%, #be185d 100%) !important;
     color: #ffffff !important;
-    letter-spacing: 0.04em !important;
-    box-shadow: 0 2px 6px rgba(236, 72, 153, 0.35) !important;
+    letter-spacing: 0.05em !important;
+    box-shadow: 0 2px 6px rgba(236, 72, 153, 0.3) !important;
 }
 
 /* Active Page Badge Adjustment */
@@ -535,7 +539,6 @@ input[type="text"]:focus, textarea:focus {
     color: #ffffff !important;
     border: 1px solid rgba(255, 255, 255, 0.45) !important;
     box-shadow: none !important;
-    animation: none !important;
 }
 
 /* ---------- Creative Sidebar Brand Card & Widgets ---------- */
@@ -1869,6 +1872,36 @@ input[type="text"]:focus, textarea:focus {
     .doc-metric-num { font-size: 0.95rem; }
     .doc-metric-lbl { font-size: 0.62rem; }
 }
+
+/* ---------- Lucide SVG Icon System ---------- */
+.lucide-icon {
+    display: inline-block;
+    vertical-align: -0.18em;
+    flex-shrink: 0;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.2s ease;
+}
+
+.icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    flex-shrink: 0;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.icon-box:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.15);
+}
+
+.inline-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    vertical-align: middle;
+}
 </style>
 """
 
@@ -1889,6 +1922,93 @@ GAP_CHIP = {
 
 def esc(value) -> str:
     return html.escape(str(value))
+
+
+LUCIDE_ICONS: dict[str, str] = {
+    "house": '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+    "home": '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+    "target": '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    "file-search": '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="11.5" cy="14.5" r="2.5"/><path d="M13.25 16.25 16 19"/>',
+    "shield-check": '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+    "compass": '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+    "clipboard-list": '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>',
+    "map": '<polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/>',
+    "brain-circuit": '<path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M12 18v4"/><path d="M8 8.5V11"/><path d="M16 8.5V11"/>',
+    "sparkles": '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>',
+    "zap": '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+    "rocket": '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 9V4s3.03.55 4 2c1.08 1.62 0 5 0 5"/>',
+    "lightbulb": '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+    "check": '<polyline points="20 6 9 17 4 12"/>',
+    "check-circle-2": '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+    "alert-triangle": '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+    "alert-circle": '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+    "x": '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+    "x-circle": '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>',
+    "circle": '<circle cx="12" cy="12" r="10"/>',
+    "circle-dot": '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="2"/>',
+    "info": '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+    "help-circle": '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+    "download": '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+    "upload": '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',
+    "upload-cloud": '<path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/>',
+    "file-text": '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>',
+    "file-plus": '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>',
+    "file-edit": '<path d="M4 13.5V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2h-5.5"/><polyline points="14 2 14 8 20 8"/><path d="M10.42 12.61a2.1 2.1 0 1 1 2.97 2.97L7.95 21 4 22l1-3.95 5.42-5.44Z"/>',
+    "search": '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+    "settings": '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+    "sliders": '<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',
+    "lock": '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+    "briefcase": '<rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+    "calendar": '<rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+    "trash-2": '<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>',
+    "external-link": '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
+    "plus": '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+    "plus-circle": '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>',
+    "bookmark": '<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>',
+    "trending-up": '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+    "bar-chart-3": '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+    "columns": '<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="12" y1="3" x2="12" y2="21"/>',
+    "layers": '<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>',
+    "pen-tool": '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>',
+    "book-open": '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+    "wrench": '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+    "trophy": '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
+    "clipboard-check": '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
+    "user-check": '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/>',
+    "message-square": '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+}
+
+
+def icon(name: str, size: int = 18, color: str | None = None, stroke_width: float = 2.0, class_name: str = "") -> str:
+    """Return inline SVG for a Lucide icon with consistent sizing, stroke and alignment."""
+    key = str(name).lower().strip().replace("_", "-")
+    path_data = LUCIDE_ICONS.get(key)
+    if not path_data:
+        # Fallback to file-text or target if unknown
+        path_data = LUCIDE_ICONS.get("target", "")
+    stroke_attr = f'stroke="{color}"' if color else 'stroke="currentColor"'
+    classes = f"lucide-icon lucide-{key} {class_name}".strip()
+    return (
+        f'<svg class="{classes}" width="{size}" height="{size}" viewBox="0 0 24 24" '
+        f'fill="none" {stroke_attr} stroke-width="{stroke_width}" stroke-linecap="round" stroke-linejoin="round" '
+        f'aria-hidden="true">{path_data}</svg>'
+    )
+
+
+def icon_box(name: str, size: int = 18, box_size: int = 32, bg: str | None = None, color: str | None = None, border: str | None = None, class_name: str = "") -> str:
+    """Return a subtle, rounded-square icon container suited for SaaS dashboards."""
+    svg = icon(name, size=size, color=color or "currentColor")
+    bg_val = bg or "var(--purple-subtle)"
+    color_val = color or "var(--primary)"
+    border_val = border or "var(--purple-border)"
+    style = f"width:{box_size}px; height:{box_size}px; background:{bg_val}; color:{color_val}; border:1px solid {border_val};"
+    return f'<div class="icon-box {class_name}" style="{style}">{svg}</div>'
+
+
+def icon_label(name: str, text: str, icon_size: int = 16, color: str | None = None, spacing: int = 6, class_name: str = "") -> str:
+    """Combine a Lucide SVG icon with text label for HTML/Markdown components."""
+    svg = icon(name, size=icon_size, color=color)
+    return f'<span class="inline-icon-wrap {class_name}" style="gap:{spacing}px;">{svg}<span>{esc(text)}</span></span>'
 
 
 def inject_cursor_spotlight() -> None:
@@ -2042,22 +2162,22 @@ def interactive_scanner_preview() -> str:
         '<div class="scanner-orb scanner-orb-1"></div>'
         '<div class="scanner-orb scanner-orb-2"></div>'
         '<div class="scanner-badge badge-top-right">'
-        '<span class="badge-icon" style="background:#ecfdf5; color:#047857;">✨</span>'
+        f'<span class="badge-icon" style="background:#ecfdf5; color:#047857;">{icon("target", size=13, color="#047857")}</span>'
         '<div><div class="badge-title">ATS Score</div>'
         '<div class="badge-val" style="color:#047857;">94% Optimal</div></div>'
         '</div>'
         '<div class="scanner-badge badge-top-left">'
-        '<span class="badge-icon" style="background:#eef2ff; color:#4f46e5;">🎯</span>'
+        f'<span class="badge-icon" style="background:#eef2ff; color:#4f46e5;">{icon("file-search", size=13, color="#4f46e5")}</span>'
         '<div><div class="badge-title">Keywords</div>'
         '<div class="badge-val" style="color:#4f46e5;">14 Matched</div></div>'
         '</div>'
         '<div class="scanner-badge badge-bottom-right">'
-        '<span class="badge-icon" style="background:#fffbeb; color:#b45309;">⚡</span>'
+        f'<span class="badge-icon" style="background:#fffbeb; color:#b45309;">{icon("zap", size=13, color="#b45309")}</span>'
         '<div><div class="badge-title">Action Verbs</div>'
         '<div class="badge-val" style="color:#b45309;">18 High-Impact</div></div>'
         '</div>'
         '<div class="scanner-badge badge-bottom-left">'
-        '<span class="badge-icon" style="background:#ecfeff; color:#0e7490;">✓</span>'
+        f'<span class="badge-icon" style="background:#ecfeff; color:#0e7490;">{icon("shield-check", size=13, color="#0e7490")}</span>'
         '<div><div class="badge-title">Format Hygiene</div>'
         '<div class="badge-val" style="color:#0e7490;">Single Column ATS</div></div>'
         '</div>'
@@ -2170,9 +2290,9 @@ def proof_bar(result: dict) -> str:
         f'<i class="p-missing" style="width:{pct(missing)}" title="Missing: {pct(missing)}"></i>'
         '</div>'
         '<div class="proof-meta">'
-        f'<div class="proof-meta-pill"><span>✓</span> <b>{len(proven_skills)}</b> proven</div>'
-        f'<div class="proof-meta-pill"><span>●</span> <b>{len(result["unproven"])}</b> listed only</div>'
-        f'<div class="proof-meta-pill"><span>✕</span> <b>{len(result["missing"])}</b> missing</div>'
+        f'<div class="proof-meta-pill">{icon("check", size=13, color="var(--green-strong)")} <b>{len(proven_skills)}</b> proven</div>'
+        f'<div class="proof-meta-pill">{icon("circle-dot", size=11, color="var(--yellow-strong)")} <b>{len(result["unproven"])}</b> listed only</div>'
+        f'<div class="proof-meta-pill">{icon("x", size=13, color="var(--red-strong)")} <b>{len(result["missing"])}</b> missing</div>'
         '</div>'
         '</div>'
     )
@@ -2315,18 +2435,18 @@ def resume_loader() -> str | None:
         st.markdown(
             f'<div class="resume-active-card">'
             f'<div class="resume-active-header">'
-            f'<div class="resume-active-title">📄 {esc(name)}</div>'
-            f'<span class="resume-badge-ok">● Active in Memory</span>'
+            f'<div class="resume-active-title">{icon("file-text", size=16, color="var(--primary)")} {esc(name)}</div>'
+            f'<span class="resume-badge-ok">{icon("check-circle-2", size=12, color="var(--green-strong)")} Active in Memory</span>'
             f'</div>'
             f'<div class="resume-active-desc">{word_count:,} words parsed · Stored in private session memory</div>'
             f'</div>',
             unsafe_allow_html=True,
         )
         c1, c2 = st.columns(2)
-        if c1.button("Replace file", key="resume_replace", use_container_width=True):
+        if c1.button("Replace file", icon=":material/refresh:", key="resume_replace", use_container_width=True):
             st.session_state["_replace_resume"] = True
             st.rerun()
-        if c2.button("Remove resume", key="resume_remove", use_container_width=True):
+        if c2.button("Remove resume", icon=":material/delete:", key="resume_remove", use_container_width=True):
             for key in ("resume_text", "resume_name"):
                 st.session_state.pop(key, None)
             st.rerun()
@@ -2334,7 +2454,7 @@ def resume_loader() -> str | None:
 
     col_btn_sample, col_spacer = st.columns([1, 1], vertical_alignment="center")
     with col_btn_sample:
-        if st.button("✨ Load sample resume (1-click)", key="resume_load_sample"):
+        if st.button("Load sample resume (1-click)", icon=":material/auto_awesome:", key="resume_load_sample"):
             load_sample_resume()
 
     uploaded = st.file_uploader(

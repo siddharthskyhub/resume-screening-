@@ -7,9 +7,9 @@ from gaps import analyze_jobs
 from roadmap import build_roadmap, roadmap_markdown
 
 KIND_BADGES = {
-    "learn": ("var(--blue-bg)", "var(--blue-text)", "var(--blue-border)", "📚 Learn Skill"),
-    "prove": ("var(--green-bg)", "var(--green-text)", "var(--green-border)", "🛠️ Prove with Project"),
-    "prerequisite": ("var(--purple-bg)", "var(--purple-text)", "var(--purple-border)", "⚡ Prerequisite"),
+    "learn": ("var(--blue-bg)", "var(--blue-text)", "var(--blue-border)", f'<span class="inline-icon-wrap" style="margin-right:4px;">{ui.icon("book-open", size=13, color="var(--blue-text)")}</span>Learn Skill'),
+    "prove": ("var(--green-bg)", "var(--green-text)", "var(--green-border)", f'<span class="inline-icon-wrap" style="margin-right:4px;">{ui.icon("wrench", size=13, color="var(--green-text)")}</span>Prove with Project'),
+    "prerequisite": ("var(--purple-bg)", "var(--purple-text)", "var(--purple-border)", f'<span class="inline-icon-wrap" style="margin-right:4px;">{ui.icon("zap", size=13, color="var(--purple-text)")}</span>Prerequisite'),
 }
 
 ui.hero(
@@ -22,17 +22,23 @@ resume_text = st.session_state.get("resume_text")
 jobs = st.session_state.get("gap_jobs", {})
 
 if not resume_text or not jobs:
-    st.info("The personalized roadmap requires both your resume and target jobs. Add them on the Skill Gaps page first.")
-    st.page_link("views/skill_gaps_page.py", label="🧭 Navigate to Skill Gaps", use_container_width=True)
+    st.info("The personalized roadmap requires both your resume and target jobs. Add them on the Skill Gaps page first.", icon=":material/info:")
+    st.page_link("views/skill_gaps_page.py", label="Navigate to Skill Gaps", icon=":material/explore:", use_container_width=True)
     st.stop()
 
 analysis = analyze_jobs(resume_text, jobs)
 if not analysis["gaps"]:
-    st.success("🎉 You have no gaps to close: your resume already demonstrates every skill these target jobs require.")
+    st.success("You have no gaps to close: your resume already demonstrates every skill these target jobs require.", icon=":material/verified:")
     st.stop()
 
 with st.container(border=True):
-    st.markdown("##### ⚙️ Plan Customization")
+    st.markdown(
+        f'<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">'
+        f'<span class="inline-icon-wrap">{ui.icon("sliders", size=16, color="var(--primary)")}</span>'
+        f'<h5 style="margin:0;">Plan Customization</h5>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
     c1, c2, c3 = st.columns(3)
     with c1:
         hours_per_week = ui.persistent(st.slider, "Study hours available per week", "roadmap_hours", 8, 2, 40)
@@ -50,7 +56,7 @@ items = build_roadmap(
     hours_per_week=hours_per_week, max_skills=max_skills, include_proofs=include_proofs,
 )
 if not items:
-    st.info("No roadmap items generated with current settings. Try enabling 'Include unproven listed skills'.")
+    st.info("No roadmap items generated with current settings. Try enabling 'Include unproven listed skills'.", icon=":material/info:")
     st.stop()
 
 total_hours = sum(i["hours"] for i in items)
@@ -64,7 +70,13 @@ st.markdown(
     ]),
     unsafe_allow_html=True,
 )
-st.caption("ℹ️ Estimates reflect the time needed to build a demonstrable, real-world portfolio project, not theoretical mastery.")
+st.markdown(
+    f'<div style="font-size:0.82rem; color:var(--muted); margin:4px 0 14px; display:flex; align-items:center; gap:6px;">'
+    f'<span class="inline-icon-wrap">{ui.icon("info", size=13, color="var(--muted)")}</span> '
+    f'Estimates reflect the time needed to build a demonstrable, real-world portfolio project, not theoretical mastery.'
+    f'</div>',
+    unsafe_allow_html=True,
+)
 
 progress_bar = st.empty()
 done_count = 0
@@ -97,7 +109,13 @@ for item in items:
                 unsafe_allow_html=True,
             )
 
-        st.caption(f"🎯 **Why this skill**: {item['reason']}")
+        st.markdown(
+            f'<div style="font-size:0.85rem; color:var(--muted); margin:4px 0 8px; display:flex; align-items:flex-start; gap:6px;">'
+            f'<span class="inline-icon-wrap" style="margin-top:2px;">{ui.icon("target", size=13, color="var(--primary)")}</span> '
+            f'<span><b>Why this skill:</b> {ui.esc(item["reason"])}</span>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
 
         st.markdown(
             f'<div style="background:var(--primary-light); border-left:3px solid var(--primary); padding:10px 14px; border-radius:6px; margin:8px 0 12px; font-size:0.92rem;">'
@@ -114,11 +132,12 @@ progress_bar.progress(pct_done, text=f"Roadmap Progress: {done_count} of {len(it
 
 if done_count == len(items):
     st.balloons()
-    st.success("🎉 Amazing! You have completed every milestone in your learning roadmap!")
+    st.success("Amazing! You have completed every milestone in your learning roadmap!", icon=":material/trophy:")
 
 st.write("")
 st.download_button(
-    "📥 Download Roadmap as Markdown (MD)",
+    "Download Roadmap as Markdown (MD)",
+    icon=":material/download:",
     data=roadmap_markdown(items, hours_per_week),
     file_name="skillmatch_learning_roadmap.md",
     mime="text/markdown",

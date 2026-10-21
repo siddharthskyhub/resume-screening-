@@ -17,13 +17,17 @@ def render_results(result: dict, job_text: str) -> None:
 
     job = result["job"]
     if not job:
-        st.warning("⚠️ No supported technical skills were detected in the target job description.")
+        st.warning("No supported technical skills were detected in the target job description.", icon=":material/warning:")
     else:
         st.markdown(ui.proof_bar(result), unsafe_allow_html=True)
         st.markdown(ui.legend(), unsafe_allow_html=True)
-        st.caption(
-            "💡 Keyword match scores count every detected skill equally. Evidence-backed match evaluates "
-            "whether you have demonstrated projects/results (skills without proof count at half weight, and required skills carry double weight)."
+        st.markdown(
+            f'<div style="font-size:0.84rem; color:var(--muted); margin:8px 0 14px; display:flex; align-items:flex-start; gap:6px;">'
+            f'<span class="inline-icon-wrap" style="flex-shrink:0; margin-top:2px;">{ui.icon("lightbulb", size=14, color="var(--primary)")}</span>'
+            f'<span>Keyword match scores count every detected skill equally. Evidence-backed match evaluates '
+            f'whether you have demonstrated projects/results (skills without proof count at half weight, and required skills carry double weight).</span>'
+            f'</div>',
+            unsafe_allow_html=True,
         )
 
         left, right = st.columns(2)
@@ -52,7 +56,7 @@ def render_results(result: dict, job_text: str) -> None:
             )
 
         if result["matched"]:
-            with st.expander("🔍 Inspect project evidence behind each matching skill", expanded=False):
+            with st.expander("Inspect project evidence behind each matching skill", expanded=False):
                 for skill in result["matched"]:
                     entry = result["evidence"].get(skill, {"level": "listed", "snippets": []})
                     css, label = EVIDENCE_LABEL.get(entry["level"], ("unproven", "Listed only"))
@@ -107,13 +111,13 @@ def render_results(result: dict, job_text: str) -> None:
         for skill, tip in suggestions:
             st.markdown(
                 f'<div style="background:#ffffff; border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;">'
-                f'<span style="color:var(--primary); font-size:1.1rem; line-height:1.2;">💡</span>'
+                f'<span class="inline-icon-wrap" style="color:var(--primary); flex-shrink:0; margin-top:2px;">{ui.icon("lightbulb", size=16, color="var(--primary)")}</span>'
                 f'<div><b>{ui.esc(skill)}</b>: <span style="color:var(--ink-light); font-size:0.92rem;">{ui.esc(tip)}</span></div>'
                 f'</div>',
                 unsafe_allow_html=True,
             )
     elif job:
-        st.success("🎉 Outstanding! Every detected skill is on your resume and backed by verifiable project evidence.")
+        st.success("Outstanding! Every detected skill is on your resume and backed by verifiable project evidence.", icon=":material/verified:")
 
     st.markdown("### Resume Format & Health Check")
     for check in result["checks"]:
@@ -131,7 +135,8 @@ def render_results(result: dict, job_text: str) -> None:
     c_dl, _ = st.columns([1, 1])
     with c_dl:
         st.download_button(
-            "📥 Download full analysis report (TXT)",
+            "Download full analysis report (TXT)",
+            icon=":material/download:",
             data=build_report(result),
             file_name="skillmatch_analysis.txt",
             mime="text/plain",
@@ -139,13 +144,13 @@ def render_results(result: dict, job_text: str) -> None:
         )
 
     if job:
-        with st.expander("📌 Save this job application to your Job Tracker"):
+        with st.expander("Save this job application to your Job Tracker"):
             with st.form("save_to_tracker", clear_on_submit=True):
                 c1, c2 = st.columns(2)
                 company = c1.text_input("Company Name", placeholder="e.g. Google, Stripe")
                 role = c2.text_input("Job Title / Role", placeholder="e.g. Senior Software Engineer")
                 url = st.text_input("Job Posting Link (optional)", placeholder="https://...")
-                if st.form_submit_button("Save Application", use_container_width=True):
+                if st.form_submit_button("Save Application", icon=":material/bookmark_add:", use_container_width=True):
                     try:
                         tracker.add_application(
                             company, role, url=url, job_description=job_text,
@@ -156,7 +161,7 @@ def render_results(result: dict, job_text: str) -> None:
                     except ValueError as error:
                         st.error(str(error))
 
-    with st.expander("📄 View parsed resume text in memory"):
+    with st.expander("View parsed resume text in memory"):
         st.text(result["resume_text"][:10000])
 
 
@@ -176,7 +181,7 @@ with right_input:
     with c_job_title:
         st.markdown("#### 2. Target Job Description")
     with c_job_sample:
-        if st.button("💼 Load sample job (1-click)", key="btn_sample_job_analyzer"):
+        if st.button("Load sample job (1-click)", icon=":material/work:", key="btn_sample_job_analyzer"):
             ui.load_sample_job()
 
     job_description = ui.persistent(
@@ -190,7 +195,7 @@ with right_input:
         label_visibility="collapsed",
     )
 
-if st.button("⚡ Analyze Resume Match", type="primary", use_container_width=True):
+if st.button("Analyze Resume Match", icon=":material/bolt:", type="primary", use_container_width=True):
     if not resume_text:
         st.error("Upload your resume or paste its text first.")
     elif not job_description.strip():
