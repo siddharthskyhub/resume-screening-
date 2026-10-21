@@ -89,31 +89,25 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-cards_html = []
+cards_html = ['<div class="feature-cards-container">']
 for number, title, description, route, gradient in STEPS:
-    badge = (
-        f'<div class="flow-num" style="--flow-c:{gradient};">{number}</div>' if number.isdigit()
-        else f'<div class="flow-opt">{number}</div>'
-    )
+    if number.isdigit():
+        badge = f'<div class="feature-card-badge flow-num" style="--flow-c:{gradient};">{number}</div>'
+    else:
+        badge = f'<div class="feature-card-badge flow-opt">{number}</div>'
+
     cards_html.append(
-        f'<a href="{route}" class="feature-card" aria-label="Open {ui.esc(title)}">'
-        f'<div class="feature-card-left">'
+        f'<a href="{route}" class="feature-card" aria-label="Open {ui.esc(title)}: {ui.esc(description)}">'
         f'{badge}'
-        f'<div class="feature-card-body">'
+        f'<div class="feature-card-content">'
         f'<div class="feature-card-title">{ui.esc(title)}</div>'
         f'<div class="feature-card-desc">{ui.esc(description)}</div>'
         f'</div>'
-        f'</div>'
-        f'<div class="feature-card-action">'
-        f'<span>Open {ui.esc(title)}</span>'
-        f'<svg class="feature-card-arrow" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">'
-        f'<path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />'
-        f'</svg>'
-        f'</div>'
         f'</a>'
     )
+cards_html.append("</div>")
 
-st.markdown("\n".join(cards_html), unsafe_allow_html=True)
+st.markdown("".join(cards_html), unsafe_allow_html=True)
 
 st.caption(
     "🔒 Privacy guarantee: Your resume is processed in local memory and is never saved to external databases. "

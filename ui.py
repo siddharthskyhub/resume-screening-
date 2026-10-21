@@ -1262,17 +1262,23 @@ input[type="text"]:focus, textarea:focus {
     margin-bottom: 0;
 }
 
-/* ---------- Integrated Fully Clickable Feature Cards ---------- */
+/* ---------- Standardised Fully Clickable Feature Cards ---------- */
+.feature-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
 .feature-card {
     display: flex !important;
     align-items: center !important;
-    justify-content: space-between !important;
-    gap: 18px !important;
-    padding: 16px 22px !important;
+    gap: 16px !important;
+    padding: 16px 20px !important;
     background: #ffffff !important;
     border: 1px solid var(--purple-border) !important;
     border-radius: var(--radius-md) !important;
-    margin-bottom: 12px !important;
     text-decoration: none !important;
     color: var(--ink) !important;
     box-shadow: 0 2px 6px rgba(139, 92, 246, 0.04) !important;
@@ -1280,20 +1286,22 @@ input[type="text"]:focus, textarea:focus {
     cursor: pointer !important;
     position: relative !important;
     overflow: hidden !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .feature-card:hover {
     border-color: var(--pink-border) !important;
-    transform: translateY(-3px) !important;
-    box-shadow: 0 10px 25px -4px rgba(244, 114, 182, 0.22), 0 4px 12px rgba(124, 58, 237, 0.06) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 22px -2px rgba(244, 114, 182, 0.20), 0 2px 6px rgba(124, 58, 237, 0.05) !important;
     background: #ffffff !important;
     text-decoration: none !important;
     color: var(--ink) !important;
 }
 
 .feature-card:active {
-    transform: translateY(-1px) scale(0.995) !important;
-    box-shadow: 0 4px 12px rgba(244, 114, 182, 0.16) !important;
+    transform: translateY(0px) scale(0.997) !important;
+    box-shadow: 0 3px 8px rgba(244, 114, 182, 0.16) !important;
 }
 
 .feature-card:focus-visible {
@@ -1303,15 +1311,36 @@ input[type="text"]:focus, textarea:focus {
     box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.25) !important;
 }
 
-.feature-card-left {
+.feature-card-badge {
+    flex: 0 0 36px !important;
+    height: 36px !important;
+    border-radius: 10px !important;
     display: flex !important;
-    align-items: flex-start !important;
-    gap: 16px !important;
-    flex: 1 1 auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.95rem !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+    flex-shrink: 0 !important;
+    user-select: none !important;
 }
 
-.feature-card-body {
+.feature-card-badge.flow-opt {
+    flex: 0 0 auto !important;
+    padding: 6px 12px !important;
+    height: auto !important;
+    border: 1px solid var(--purple-border) !important;
+    background: var(--purple-bg) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--purple-text) !important;
+    font-size: 0.82rem !important;
+    box-shadow: none !important;
+}
+
+.feature-card-content {
     flex: 1 1 auto !important;
+    min-width: 0 !important;
 }
 
 .feature-card-title {
@@ -1332,40 +1361,10 @@ input[type="text"]:focus, textarea:focus {
 .feature-card-desc {
     color: var(--muted) !important;
     font-size: 0.92rem !important;
-    line-height: 1.45 !important;
+    line-height: 1.48 !important;
     margin: 0 !important;
-}
-
-.feature-card-action {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    padding: 8px 16px !important;
-    background: var(--purple-light) !important;
-    border: 1px solid var(--purple-border) !important;
-    border-radius: var(--radius-sm) !important;
-    color: #4f46e5 !important;
-    font-size: 0.85rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.02em !important;
-    white-space: nowrap !important;
-    flex-shrink: 0 !important;
-    transition: all 0.2s ease !important;
-}
-
-.feature-card:hover .feature-card-action {
-    background: #fff0f6 !important;
-    border-color: var(--pink-border) !important;
-    color: #be185d !important;
-    box-shadow: 0 2px 8px rgba(244, 114, 182, 0.25) !important;
-}
-
-.feature-card-arrow {
-    transition: transform 0.2s ease !important;
-}
-
-.feature-card:hover .feature-card-arrow {
-    transform: translateX(4px) !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
 }
 
 /* Workflow Step Cards */
@@ -1856,10 +1855,9 @@ input[type="text"]:focus, textarea:focus {
     .demand { grid-template-columns: 1fr; gap: 6px; }
     .demand-meta { text-align: left; }
     .flow { flex-direction: column; gap: 10px; }
-    .feature-card { padding: 14px 14px !important; gap: 12px !important; }
-    .feature-card-left { gap: 12px !important; }
-    .feature-card-action span { display: none !important; }
-    .feature-card-action { padding: 6px 8px !important; }
+    .feature-card { padding: 14px 16px !important; gap: 14px !important; }
+    .feature-card-title { font-size: 1.02rem !important; }
+    .feature-card-desc { font-size: 0.88rem !important; }
     .scanner-hero-stage { padding: 12px 2px; max-width: 100%; }
     .scanner-doc-card { padding: 16px 14px; }
     .scanner-badge { padding: 4px 8px; font-size: 0.72rem; }
