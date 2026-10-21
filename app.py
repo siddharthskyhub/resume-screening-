@@ -1,6 +1,9 @@
+import importlib
 import streamlit as st
 
 import ui
+
+importlib.reload(ui)
 
 st.set_page_config(
     page_title="SkillMatch AI · Evidence-Based Resume Matching",
