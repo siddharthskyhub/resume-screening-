@@ -1262,6 +1262,112 @@ input[type="text"]:focus, textarea:focus {
     margin-bottom: 0;
 }
 
+/* ---------- Integrated Fully Clickable Feature Cards ---------- */
+.feature-card {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 18px !important;
+    padding: 16px 22px !important;
+    background: #ffffff !important;
+    border: 1px solid var(--purple-border) !important;
+    border-radius: var(--radius-md) !important;
+    margin-bottom: 12px !important;
+    text-decoration: none !important;
+    color: var(--ink) !important;
+    box-shadow: 0 2px 6px rgba(139, 92, 246, 0.04) !important;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    cursor: pointer !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.feature-card:hover {
+    border-color: var(--pink-border) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 25px -4px rgba(244, 114, 182, 0.22), 0 4px 12px rgba(124, 58, 237, 0.06) !important;
+    background: #ffffff !important;
+    text-decoration: none !important;
+    color: var(--ink) !important;
+}
+
+.feature-card:active {
+    transform: translateY(-1px) scale(0.995) !important;
+    box-shadow: 0 4px 12px rgba(244, 114, 182, 0.16) !important;
+}
+
+.feature-card:focus-visible {
+    outline: 2px solid #a855f7 !important;
+    outline-offset: 3px !important;
+    border-color: #a855f7 !important;
+    box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.25) !important;
+}
+
+.feature-card-left {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+    flex: 1 1 auto !important;
+}
+
+.feature-card-body {
+    flex: 1 1 auto !important;
+}
+
+.feature-card-title {
+    font-family: var(--display) !important;
+    font-weight: 700 !important;
+    font-size: 1.08rem !important;
+    color: var(--ink) !important;
+    letter-spacing: -0.015em !important;
+    line-height: 1.25 !important;
+    margin-bottom: 3px !important;
+    transition: color 0.2s ease !important;
+}
+
+.feature-card:hover .feature-card-title {
+    color: #4f46e5 !important;
+}
+
+.feature-card-desc {
+    color: var(--muted) !important;
+    font-size: 0.92rem !important;
+    line-height: 1.45 !important;
+    margin: 0 !important;
+}
+
+.feature-card-action {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 8px 16px !important;
+    background: var(--purple-light) !important;
+    border: 1px solid var(--purple-border) !important;
+    border-radius: var(--radius-sm) !important;
+    color: #4f46e5 !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    transition: all 0.2s ease !important;
+}
+
+.feature-card:hover .feature-card-action {
+    background: #fff0f6 !important;
+    border-color: var(--pink-border) !important;
+    color: #be185d !important;
+    box-shadow: 0 2px 8px rgba(244, 114, 182, 0.25) !important;
+}
+
+.feature-card-arrow {
+    transition: transform 0.2s ease !important;
+}
+
+.feature-card:hover .feature-card-arrow {
+    transform: translateX(4px) !important;
+}
+
 /* Workflow Step Cards */
 .flow {
     display: flex;
@@ -1750,6 +1856,10 @@ input[type="text"]:focus, textarea:focus {
     .demand { grid-template-columns: 1fr; gap: 6px; }
     .demand-meta { text-align: left; }
     .flow { flex-direction: column; gap: 10px; }
+    .feature-card { padding: 14px 14px !important; gap: 12px !important; }
+    .feature-card-left { gap: 12px !important; }
+    .feature-card-action span { display: none !important; }
+    .feature-card-action { padding: 6px 8px !important; }
     .scanner-hero-stage { padding: 12px 2px; max-width: 100%; }
     .scanner-doc-card { padding: 16px 14px; }
     .scanner-badge { padding: 4px 8px; font-size: 0.72rem; }
@@ -1786,7 +1896,7 @@ def esc(value) -> str:
 def inject_cursor_spotlight() -> None:
     """Inject a lightweight, fluid, 60fps cursor-following soft pink spotlight."""
     components.html(
-        """
+        r"""
         <script>
         (function() {
             try {
@@ -1829,7 +1939,7 @@ def inject_cursor_spotlight() -> None:
 
                         const target = e.target;
                         const interactive = target && target.closest && target.closest(
-                            'button, a, input, textarea, select, .stButton, .stat-card, .panel, .flow, .scanner-doc-card, .sidebar-status-card, [data-testid="stSidebarNavLink"], .page-head, .home-hero-badge, .mk, .doc-metric-item, .sidebar-tip-card'
+                            'button, a, input, textarea, select, .stButton, .stat-card, .panel, .flow, .feature-card, .scanner-doc-card, .sidebar-status-card, [data-testid="stSidebarNavLink"], .page-head, .home-hero-badge, .mk, .doc-metric-item, .sidebar-tip-card'
                         );
                         if (interactive && !isInteractive) {
                             isInteractive = true;
@@ -1839,6 +1949,24 @@ def inject_cursor_spotlight() -> None:
                             spotlight.classList.remove('spotlight-hovering');
                         }
                     }, { passive: true });
+
+                    doc.addEventListener('click', function(e) {
+                        const card = e.target && e.target.closest && e.target.closest('.feature-card');
+                        if (!card) return;
+
+                        // Allow middle click or modifier keys (Ctrl/Cmd/Shift) for opening new tab
+                        if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey) return;
+
+                        const href = card.getAttribute('href');
+                        if (!href) return;
+
+                        const slug = href.replace(/^(\/|\.\/)/, '').split(/[?#]/)[0];
+                        const sidebarLink = doc.querySelector('a[data-testid="stSidebarNavLink"][href*="' + slug + '"]');
+                        if (sidebarLink) {
+                            e.preventDefault();
+                            sidebarLink.click();
+                        }
+                    }, false);
 
                     doc.addEventListener('mouseleave', function() {
                         isVisible = false;

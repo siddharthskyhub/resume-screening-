@@ -4,29 +4,29 @@ import tracker
 import ui
 
 STEPS = [
-    ("1", "Resume analyzer",
+    ("1", "Resume Analyzer",
      "Compare your resume with one job. See which matched skills your projects actually prove.",
-     "views/analyzer_page.py",
+     "/analyzer",
      "linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)"),
-    ("2", "ATS checker",
+    ("2", "ATS Checker",
      "Audit your resume for ATS friendliness: contact details, standard headings, formatting, and action verbs.",
-     "views/ats_checker_page.py",
+     "/ats-checker",
      "linear-gradient(135deg, #10b981 0%, #059669 100%)"),
-    ("3", "Skill gaps",
+    ("3", "Skill Gaps",
      "Compare against several jobs at once and find the gaps that come up most across your target market.",
-     "views/skill_gaps_page.py",
+     "/skill-gaps",
      "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"),
-    ("4", "Job tracker",
+    ("4", "Job Tracker",
      "Keep every application, match score, and note organized on a clean, responsive board.",
-     "views/tracker_page.py",
+     "/tracker",
      "linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)"),
-    ("5", "Learning roadmap",
+    ("5", "Learning Roadmap",
      "Turn your biggest skill gaps into concrete portfolio projects you can add to your resume.",
-     "views/roadmap_page.py",
+     "/roadmap",
      "linear-gradient(135deg, #06b6d4 0%, #0284c7 100%)"),
-    ("AI", "AI coach",
+    ("AI", "AI Coach",
      "Fact-checked bullet rewrites, interview questions, and a plain-language fit summary running privately on your computer with Ollama.",
-     "views/ai_coach_page.py",
+     "/ai-coach",
      "linear-gradient(135deg, #ec4899 0%, #be185d 100%)"),
 ]
 
@@ -89,18 +89,31 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-for number, title, description, path, gradient in STEPS:
-    text_col, link_col = st.columns([9, 2], vertical_alignment="center")
+cards_html = []
+for number, title, description, route, gradient in STEPS:
     badge = (
         f'<div class="flow-num" style="--flow-c:{gradient};">{number}</div>' if number.isdigit()
         else f'<div class="flow-opt">{number}</div>'
     )
-    text_col.markdown(
-        f'<div class="flow">{badge}<div><div class="flow-title">{ui.esc(title.capitalize())}</div>'
-        f'<div class="flow-desc">{ui.esc(description)}</div></div></div>',
-        unsafe_allow_html=True,
+    cards_html.append(
+        f'<a href="{route}" class="feature-card" aria-label="Open {ui.esc(title)}">'
+        f'<div class="feature-card-left">'
+        f'{badge}'
+        f'<div class="feature-card-body">'
+        f'<div class="feature-card-title">{ui.esc(title)}</div>'
+        f'<div class="feature-card-desc">{ui.esc(description)}</div>'
+        f'</div>'
+        f'</div>'
+        f'<div class="feature-card-action">'
+        f'<span>Open {ui.esc(title)}</span>'
+        f'<svg class="feature-card-arrow" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">'
+        f'<path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />'
+        f'</svg>'
+        f'</div>'
+        f'</a>'
     )
-    link_col.page_link(path, label=f"Open {title.lower()}", use_container_width=True)
+
+st.markdown("\n".join(cards_html), unsafe_allow_html=True)
 
 st.caption(
     "🔒 Privacy guarantee: Your resume is processed in local memory and is never saved to external databases. "
