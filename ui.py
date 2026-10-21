@@ -521,6 +521,13 @@ input[type="text"]:focus, textarea:focus {
     box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3) !important;
 }
 
+[data-testid="stSidebarNavLink"][href*="ai-coach"] span:first-child {
+    color: #0ea5e9 !important;
+}
+[data-testid="stSidebarNavLink"][href*="ai-coach"]:hover span:first-child {
+    color: #06b6d4 !important;
+}
+
 [data-testid="stSidebarNavLink"][href*="ai-coach"]::after {
     content: "AI PRO" !important;
     margin-left: auto !important;
@@ -1959,6 +1966,7 @@ LUCIDE_ICONS: dict[str, str] = {
     "clipboard-check": '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
     "user-check": '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/>',
     "message-square": '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    "atom": '<circle cx="12" cy="12" r="2.2" fill="currentColor"/><ellipse cx="12" cy="12" rx="9" ry="3.8"/><ellipse cx="12" cy="12" rx="9" ry="3.8" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.8" transform="rotate(120 12 12)"/>',
 }
 
 
@@ -2050,6 +2058,38 @@ def brand_logo(size: int = 42, inline: bool = False, class_name: str = "") -> st
         f'<path d="M74,50 C74,66 68,78 55,78 L55,63 C63,63 64,57 64,50 Z" fill="url(#pb_{uid})"/>'
         f'<path d="M55,78 L43,78 L43,63 L55,63 Z" fill="url(#fb_{uid})"/>'
         f'<path d="M43,78 L26,63 L43,63 Z" fill="url(#wb_{uid})"/>'
+        f'</g>'
+        f'</svg>'
+    )
+
+
+def ai_coach_logo(size: int = 42, inline: bool = False, class_name: str = "") -> str:
+    """Return an inline SVG of the cyan quantum atom AI Coach logo inspired by user reference."""
+    uid = f"ai_{size}_{abs(hash(size)) % 10000}"
+    inline_style = "vertical-align:middle; margin-right:6px;" if inline else ""
+    classes = f"ai-coach-logo-svg {class_name}".strip()
+    return (
+        f'<svg class="{classes}" width="{size}" height="{size}" viewBox="0 0 100 100" '
+        f'style="{inline_style}" aria-label="AI Coach Atom Logo" xmlns="http://www.w3.org/2000/svg">'
+        f'<defs>'
+        f'<linearGradient id="abg_{uid}" x1="0%" y1="0%" x2="100%" y2="100%">'
+        f'<stop offset="0%" stop-color="#040711"/>'
+        f'<stop offset="50%" stop-color="#080c1b"/>'
+        f'<stop offset="100%" stop-color="#0b1126"/>'
+        f'</linearGradient>'
+        f'<filter id="acg_{uid}" x="-30%" y="-30%" width="160%" height="160%">'
+        f'<feDropShadow dx="0" dy="0" stdDeviation="3.5" flood-color="#38bdf8" flood-opacity="0.8"/>'
+        f'<feDropShadow dx="0" dy="1" stdDeviation="6" flood-color="#0284c7" flood-opacity="0.45"/>'
+        f'</filter>'
+        f'</defs>'
+        f'<rect width="100" height="100" rx="26" fill="url(#abg_{uid})"/>'
+        f'<rect width="98" height="98" x="1" y="1" rx="25" fill="none" stroke="rgba(56, 189, 248, 0.28)" stroke-width="1.2"/>'
+        f'<g filter="url(#acg_{uid})">'
+        f'<ellipse cx="50" cy="50" rx="33" ry="13.5" fill="none" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round"/>'
+        f'<ellipse cx="50" cy="50" rx="33" ry="13.5" fill="none" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" transform="rotate(60 50 50)"/>'
+        f'<ellipse cx="50" cy="50" rx="33" ry="13.5" fill="none" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" transform="rotate(120 50 50)"/>'
+        f'<circle cx="50" cy="50" r="7" fill="#38bdf8"/>'
+        f'<circle cx="50" cy="50" r="3.2" fill="#e0f2fe"/>'
         f'</g>'
         f'</svg>'
     )
@@ -2162,11 +2202,13 @@ def inject_css() -> None:
     inject_cursor_spotlight()
 
 
-def hero(title: str, subtitle: str, badge: str | None = None) -> None:
-    """Modern, colorful page header with optional pill badge."""
+def hero(title: str, subtitle: str, badge: str | None = None, icon_html: str | None = None) -> None:
+    """Modern, colorful page header with optional pill badge and optional emblem."""
     badge_html = f'<div class="page-head-badge">{esc(badge)}</div>' if badge else ""
+    icon_wrap = f'<div style="margin-bottom:12px; display:inline-flex;">{icon_html}</div><br/>' if icon_html else ""
     st.markdown(
         f'<div class="page-head">'
+        f'{icon_wrap}'
         f'{badge_html}'
         f'<h1>{esc(title)}</h1>'
         f'<p>{esc(subtitle)}</p>'

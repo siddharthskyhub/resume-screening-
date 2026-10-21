@@ -25,7 +25,7 @@ pages = {
     "CAREER STRATEGY": [
         st.Page("views/tracker_page.py", title="Job Tracker", icon=":material/assignment:", url_path="tracker"),
         st.Page("views/roadmap_page.py", title="Learning Roadmap", icon=":material/map:", url_path="roadmap"),
-        st.Page("views/ai_coach_page.py", title="AI Coach", icon=":material/smart_toy:", url_path="ai-coach"),
+        st.Page("views/ai_coach_page.py", title="AI Coach", icon=":material/science:", url_path="ai-coach"),
     ],
 }
 navigation = st.navigation(pages)

@@ -94,7 +94,7 @@ for number, title, description, route, gradient in STEPS:
     if number.isdigit():
         badge = f'<div class="feature-card-badge flow-num" style="--flow-c:{gradient};">{number}</div>'
     else:
-        badge = f'<div class="feature-card-badge flow-opt">{number}</div>'
+        badge = f'<div class="feature-card-badge flow-opt" style="padding:0; overflow:hidden; border:none; background:transparent; display:flex; align-items:center; justify-content:center;">{ui.ai_coach_logo(38)}</div>'
 
     cards_html.append(
         f'<a href="{route}" class="feature-card" aria-label="Open {ui.esc(title)}: {ui.esc(description)}">'

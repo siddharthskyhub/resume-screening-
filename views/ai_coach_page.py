@@ -29,6 +29,7 @@ ui.hero(
     "Local AI Career Coach",
     "Private, on-device intelligence for bullet rewriting, semantic requirement matching, fit explanations, and tailored interview coaching. Your resume never leaves your computer.",
     badge="AI Module · 100% On-Device",
+    icon_html=ui.ai_coach_logo(52),
 )
 
 # ------------------------------- inputs ------------------------------------ #
