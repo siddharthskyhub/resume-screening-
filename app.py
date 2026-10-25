@@ -14,21 +14,21 @@ st.set_page_config(
 ui.inject_css()
 
 pages = {
-    "OVERVIEW": [
+    "Overview": [
         st.Page("views/home_page.py", title="Home", icon=":material/home:", default=True),
     ],
-    "CORE AUDIT": [
+    "Core Audit": [
         st.Page("views/analyzer_page.py", title="Resume Analyzer", icon=":material/find_in_page:", url_path="analyzer"),
         st.Page("views/ats_checker_page.py", title="ATS Checker", icon=":material/verified_user:", url_path="ats-checker"),
         st.Page("views/skill_gaps_page.py", title="Skill Gaps", icon=":material/explore:", url_path="skill-gaps"),
     ],
-    "CAREER STRATEGY": [
+    "Career Strategy": [
         st.Page("views/tracker_page.py", title="Job Tracker", icon=":material/assignment:", url_path="tracker"),
         st.Page("views/roadmap_page.py", title="Learning Roadmap", icon=":material/map:", url_path="roadmap"),
         st.Page("views/ai_coach_page.py", title="AI Coach", icon=":material/science:", url_path="ai-coach"),
     ],
 }
-navigation = st.navigation(pages)
+navigation = st.navigation(pages, position="top")
 
 with st.sidebar:
     st.markdown(
@@ -47,6 +47,49 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
     st.divider()
+
+    st.markdown(
+        '<div style="font-size:0.72rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin:4px 0 6px;">'
+        f'<span class="inline-icon-wrap" style="margin-right:5px;">{ui.icon("compass", size=13, color="var(--primary)")}</span>FEATURE NAVIGATOR'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+    feature_options = [
+        "Overview: Home",
+        "Core Audit: Resume Analyzer",
+        "Core Audit: ATS Checker",
+        "Core Audit: Skill Gaps",
+        "Career Strategy: Job Tracker",
+        "Career Strategy: Learning Roadmap",
+        "Career Strategy: AI Coach",
+    ]
+    current_title = getattr(navigation, "title", "Home")
+    default_idx = 0
+    for idx, opt in enumerate(feature_options):
+        if current_title in opt:
+            default_idx = idx
+            break
+
+    selected_feature = st.selectbox(
+        "Navigate Feature",
+        options=feature_options,
+        index=default_idx,
+        key="sb_nav_jump",
+        label_visibility="collapsed",
+    )
+    if selected_feature != feature_options[default_idx]:
+        route_map = {
+            "Overview: Home": "views/home_page.py",
+            "Core Audit: Resume Analyzer": "views/analyzer_page.py",
+            "Core Audit: ATS Checker": "views/ats_checker_page.py",
+            "Core Audit: Skill Gaps": "views/skill_gaps_page.py",
+            "Career Strategy: Job Tracker": "views/tracker_page.py",
+            "Career Strategy: Learning Roadmap": "views/roadmap_page.py",
+            "Career Strategy: AI Coach": "views/ai_coach_page.py",
+        }
+        st.switch_page(route_map[selected_feature])
+
+    st.markdown("<div style='margin-bottom:12px;'></div>", unsafe_allow_html=True)
 
     resume_name = st.session_state.get("resume_name")
     resume_text = st.session_state.get("resume_text")
