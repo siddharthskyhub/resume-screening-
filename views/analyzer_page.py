@@ -110,7 +110,7 @@ def render_results(result: dict, job_text: str) -> None:
     if suggestions:
         for skill, tip in suggestions:
             st.markdown(
-                f'<div style="background:#ffffff; border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;">'
+                f'<div style="background:var(--card-bg); border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;">'
                 f'<span class="inline-icon-wrap" style="color:var(--primary); flex-shrink:0; margin-top:2px;">{ui.icon("lightbulb", size=16, color="var(--primary)")}</span>'
                 f'<div><b>{ui.esc(skill)}</b>: <span style="color:var(--ink-light); font-size:0.92rem;">{ui.esc(tip)}</span></div>'
                 f'</div>',
@@ -123,7 +123,7 @@ def render_results(result: dict, job_text: str) -> None:
     for check in result["checks"]:
         chip_html = ui.chip("Pass", "matched") if check["ok"] else ui.chip("Review", "unproven")
         st.markdown(
-            f'<div style="background:#ffffff; border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">'
+            f'<div style="background:var(--card-bg); border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">'
             f'<div style="display:flex; align-items:center; gap:8px;">{chip_html} <b>{ui.esc(check["label"])}</b></div>'
             f'<span style="color:var(--muted); font-size:0.88rem;">{ui.esc(check["detail"])}</span>'
             f'</div>',

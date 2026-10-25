@@ -125,7 +125,7 @@ if jobs:
         c1, c2 = st.columns([5, 1], vertical_alignment="center")
         with c1:
             st.markdown(
-                f'<div style="background:#ffffff; border:1px solid var(--line); border-radius:8px; padding:8px 14px; display:flex; justify-content:space-between; align-items:center;">'
+                f'<div style="background:var(--card-bg); border:1px solid var(--line); border-radius:8px; padding:8px 14px; display:flex; justify-content:space-between; align-items:center;">'
                 f'<span style="display:flex; align-items:center; gap:8px;"><span class="inline-icon-wrap">{ui.icon("briefcase", size=14, color="var(--primary)")}</span><b>{ui.md_escape(job_name)}</b></span>'
                 f'<span style="font-size:0.8rem; color:var(--muted);">{len(jobs[job_name].split())} words</span>'
                 f'</div>',

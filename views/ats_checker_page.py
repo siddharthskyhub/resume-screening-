@@ -57,29 +57,29 @@ grade = audit["grade"]
 rating = audit["rating"]
 
 if score >= 85:
-    badge_color = "#047857"
-    badge_bg = "#ecfdf5"
-    badge_border = "#a7f3d0"
+    badge_color = "var(--green-text)"
+    badge_bg = "var(--green-bg)"
+    badge_border = "var(--green-border)"
 elif score >= 70:
-    badge_color = "#1d4ed8"
-    badge_bg = "#eff6ff"
-    badge_border = "#bfdbfe"
+    badge_color = "var(--blue-text)"
+    badge_bg = "var(--blue-bg)"
+    badge_border = "var(--blue-border)"
 elif score >= 50:
-    badge_color = "#b45309"
-    badge_bg = "#fffbeb"
-    badge_border = "#fde68a"
+    badge_color = "var(--yellow-text)"
+    badge_bg = "var(--yellow-bg)"
+    badge_border = "var(--yellow-border)"
 else:
-    badge_color = "#be123c"
-    badge_bg = "#fff1f2"
-    badge_border = "#fecdd3"
+    badge_color = "var(--red-text)"
+    badge_bg = "var(--red-bg)"
+    badge_border = "var(--red-border)"
 
 # Score banner
 c_score, c_summary = st.columns([1, 2], vertical_alignment="center", gap="medium")
 with c_score:
     st.markdown(
-        f'<div style="background:#ffffff; border:1px solid var(--line); border-radius:14px; padding:22px; text-align:center; box-shadow:0 4px 12px rgba(0,0,0,0.04);">'
+        f'<div class="ats-score-box" style="background:var(--card-bg); border:1px solid var(--line); border-radius:14px; padding:22px; text-align:center; box-shadow:0 4px 12px rgba(0,0,0,0.04);">'
         f'<div style="font-size:3.3rem; font-weight:800; font-family:var(--display); line-height:1; color:var(--ink);">{score}<span style="font-size:1.4rem; color:var(--muted); font-weight:500;">/100</span></div>'
-        f'<div style="display:inline-block; margin-top:10px; padding:4px 14px; border-radius:9999px; font-weight:700; font-size:0.88rem; background:{badge_bg}; color:{badge_color}; border:1px solid {badge_border};">'
+        f'<div class="ats-score-pill" style="display:inline-block; margin-top:10px; padding:4px 14px; border-radius:9999px; font-weight:700; font-size:0.88rem; background:{badge_bg}; color:{badge_color}; border:1px solid {badge_border};">'
         f'Grade {grade} · {rating}'
         f'</div>'
         f'</div>',
@@ -119,16 +119,16 @@ with tab_checklist:
         for c in cat_checks:
             if c["status"] == "pass":
                 icon = f'<span class="inline-icon-wrap" style="color:#10b981; margin-right:8px; display:inline-flex; align-items:center;">{ui.icon("check-circle-2", size=16, color="#10b981")}</span>'
-                badge = f'<span style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">{c["points"]}/{c["max_points"]} pts</span>'
+                badge = f'<span style="background:var(--green-bg); color:var(--green-text); border:1px solid var(--green-border); padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">{c["points"]}/{c["max_points"]} pts</span>'
             elif c["status"] == "warning":
                 icon = f'<span class="inline-icon-wrap" style="color:#f59e0b; margin-right:8px; display:inline-flex; align-items:center;">{ui.icon("alert-circle", size=16, color="#f59e0b")}</span>'
-                badge = f'<span style="background:#fffbeb; color:#b45309; border:1px solid #fde68a; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">{c["points"]}/{c["max_points"]} pts</span>'
+                badge = f'<span style="background:var(--yellow-bg); color:var(--yellow-text); border:1px solid var(--yellow-border); padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">{c["points"]}/{c["max_points"]} pts</span>'
             else:
                 icon = f'<span class="inline-icon-wrap" style="color:#f43f5e; margin-right:8px; display:inline-flex; align-items:center;">{ui.icon("x-circle", size=16, color="#f43f5e")}</span>'
-                badge = f'<span style="background:#fff1f2; color:#be123c; border:1px solid #fecdd3; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">{c["points"]}/{c["max_points"]} pts</span>'
+                badge = f'<span style="background:var(--red-bg); color:var(--red-text); border:1px solid var(--red-border); padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">{c["points"]}/{c["max_points"]} pts</span>'
 
             st.markdown(
-                f'<div style="background:#ffffff; border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">'
+                f'<div style="background:var(--card-bg); border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">'
                 f'<div style="display:flex; align-items:flex-start;">{icon}<div><b>{c["name"]}</b><div style="color:var(--muted); font-size:0.88rem; margin-top:2px;">{c["detail"]}</div></div></div>'
                 f'<div>{badge}</div>'
                 f'</div>',
@@ -194,7 +194,7 @@ with tab_verbs:
         st.caption("Replace passive language with decisive accomplishment verbs.")
         for p in v["weak_phrases_found"]:
             st.markdown(
-                f'<div style="background:#fffbeb; border:1px solid #fde68a; border-radius:6px; padding:6px 12px; margin-bottom:6px; font-size:0.88rem; color:#92400e;">'
+                f'<div style="background:var(--yellow-bg); border:1px solid var(--yellow-border); border-radius:6px; padding:6px 12px; margin-bottom:6px; font-size:0.88rem; color:var(--yellow-text);">'
                 f'Avoid <b>"{p}"</b> — replace with action-oriented phrasing like <i>"Architected and deployed..."</i>.'
                 f'</div>',
                 unsafe_allow_html=True,
@@ -211,7 +211,7 @@ with tab_verbs:
         st.caption("Hiring managers and modern algorithms prefer concrete achievements over subjective claims.")
         for b in v["buzzwords_found"]:
             st.markdown(
-                f'<div style="background:#fff1f2; border:1px solid #fecdd3; border-radius:6px; padding:6px 12px; margin-bottom:6px; font-size:0.88rem; color:#9f1239;">'
+                f'<div style="background:var(--red-bg); border:1px solid var(--red-border); border-radius:6px; padding:6px 12px; margin-bottom:6px; font-size:0.88rem; color:var(--red-text);">'
                 f'Replace <b>"{b}"</b> with verifiable project results and metrics.'
                 f'</div>',
                 unsafe_allow_html=True,
@@ -223,7 +223,7 @@ with tab_alignment:
         st.info("Paste a job description above to check how well your resume matches the specific keywords of your target role.")
     else:
         st.markdown(
-            f'<div style="background:#ffffff; border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px;">'
+            f'<div style="background:var(--card-bg); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px;">'
             f'<div style="font-size:2rem; font-weight:800; color:var(--primary);">{ja["match_rate"]}%</div>'
             f'<div style="color:var(--muted); font-size:0.9rem;">ATS Keyword Match against target job requirements</div>'
             f'</div>',
