@@ -206,28 +206,14 @@ section.main {
 }
 
 .block-container {
-    padding-top: 5.2rem !important;
+    padding-top: 1.8rem !important;
     padding-bottom: 3.5rem !important;
     max-width: 1180px !important;
     margin: 0 auto;
 }
 
 header[data-testid="stHeader"] {
-    background: rgba(255, 255, 255, 0.88) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    border-bottom: 1px solid var(--purple-border) !important;
-    box-shadow: 0 4px 20px -2px rgba(124, 58, 237, 0.08) !important;
-    height: 3.75rem !important;
-    display: flex !important;
-    align-items: center !important;
-    transition: background 0.25s ease, border-color 0.25s ease !important;
-}
-
-[data-theme="dark"] header[data-testid="stHeader"] {
-    background: rgba(14, 10, 34, 0.92) !important;
-    border-bottom: 1px solid #2e2454 !important;
-    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5) !important;
+    background: transparent !important;
 }
 footer {
     visibility: hidden;
@@ -2365,305 +2351,6 @@ body[data-theme="dark"],
         gap: 4px;
     }
 }
-
-/* ---------- Creative Top Header & Dropdown Navigation ---------- */
-.top-nav-brand-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 12px 4px 6px;
-    margin-right: 12px;
-    margin-left: 6px;
-    background: rgba(245, 239, 252, 0.7);
-    border: 1px solid var(--purple-border);
-    border-radius: 9999px;
-    text-decoration: none !important;
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
-}
-.top-nav-brand-pill:hover {
-    background: #ffffff;
-    border-color: var(--pink-accent);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(244, 114, 182, 0.22);
-}
-.top-brand-text {
-    font-family: var(--display);
-    font-weight: 800;
-    font-size: 0.95rem;
-    letter-spacing: -0.02em;
-    background: linear-gradient(135deg, #0f172a 0%, #4338ca 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-.top-brand-badge {
-    font-size: 0.60rem;
-    font-weight: 800;
-    padding: 2px 6px;
-    background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
-    color: #ffffff;
-    border-radius: 9999px;
-    letter-spacing: 0.05em;
-    box-shadow: 0 2px 6px rgba(236, 72, 153, 0.35);
-}
-[data-theme="dark"] .top-nav-brand-pill {
-    background: #171033;
-    border-color: #312658;
-}
-[data-theme="dark"] .top-nav-brand-pill:hover {
-    background: #23184b;
-    border-color: #ec4899;
-}
-[data-theme="dark"] .top-brand-text {
-    background: linear-gradient(135deg, #ffffff 0%, #c084fc 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Dropdown Section Buttons (Overview, Core Audit, Career Strategy) */
-button[data-testid="stTopNavSection"] {
-    font-family: var(--display) !important;
-    font-weight: 700 !important;
-    font-size: 0.88rem !important;
-    letter-spacing: -0.01em !important;
-    color: var(--ink-light) !important;
-    background: rgba(245, 239, 252, 0.75) !important;
-    border: 1px solid var(--purple-border) !important;
-    border-radius: 9999px !important;
-    padding: 5px 14px !important;
-    margin: 0 3px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 7px !important;
-    cursor: pointer !important;
-    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
-    white-space: nowrap !important;
-}
-
-button[data-testid="stTopNavSection"]:hover {
-    background: #ffffff !important;
-    color: #4f46e5 !important;
-    border-color: var(--pink-accent) !important;
-    transform: translateY(-1px) !important;
-    box-shadow: 0 4px 14px rgba(244, 114, 182, 0.22) !important;
-}
-
-button[data-testid="stTopNavSection"][aria-expanded="true"],
-button[data-testid="stTopNavSection"].section-active {
-    background: linear-gradient(135deg, rgba(245, 239, 252, 0.95) 0%, rgba(253, 242, 248, 0.95) 100%) !important;
-    border-color: var(--pink-accent) !important;
-    color: #4f46e5 !important;
-    box-shadow: 0 2px 10px rgba(244, 114, 182, 0.22) !important;
-    font-weight: 800 !important;
-}
-
-button[data-testid="stTopNavSection"][aria-expanded="true"] {
-    background: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #ec4899 100%) !important;
-    color: #ffffff !important;
-    border-color: transparent !important;
-    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.35) !important;
-    transform: translateY(-1px) !important;
-}
-
-button[data-testid="stTopNavSection"][aria-expanded="true"] svg,
-button[data-testid="stTopNavSection"][aria-expanded="true"] span {
-    color: #ffffff !important;
-    fill: #ffffff !important;
-}
-
-/* Dark Mode for Top Nav Section Buttons */
-[data-theme="dark"] button[data-testid="stTopNavSection"] {
-    background: #171033 !important;
-    border-color: #312658 !important;
-    color: #cbd5e1 !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
-}
-
-[data-theme="dark"] button[data-testid="stTopNavSection"]:hover {
-    background: #23184b !important;
-    color: #ffffff !important;
-    border-color: #ec4899 !important;
-    box-shadow: 0 4px 14px rgba(236, 72, 153, 0.25) !important;
-}
-
-[data-theme="dark"] button[data-testid="stTopNavSection"].section-active {
-    background: linear-gradient(135deg, #1b123d 0%, #22164a 100%) !important;
-    border-color: #ec4899 !important;
-    color: #f8fafc !important;
-    box-shadow: 0 2px 12px rgba(236, 72, 153, 0.28) !important;
-}
-
-[data-theme="dark"] button[data-testid="stTopNavSection"][aria-expanded="true"] {
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #ec4899 100%) !important;
-    color: #ffffff !important;
-}
-
-/* Dropdown Floating Popovers */
-div[data-testid="stTopNavPopoverBody"] {
-    border-radius: 16px !important;
-    overflow: hidden !important;
-    box-shadow: 0 20px 40px -4px rgba(124, 58, 237, 0.25), 0 4px 14px rgba(15, 23, 42, 0.08) !important;
-    background: rgba(255, 255, 255, 0.96) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border: 1px solid var(--purple-border) !important;
-    padding: 8px !important;
-    min-width: 250px !important;
-    animation: topNavDropIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-@keyframes topNavDropIn {
-    from {
-        opacity: 0;
-        transform: translateY(-8px) scale(0.97);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-[data-theme="dark"] div[data-testid="stTopNavPopoverBody"] {
-    background: rgba(20, 15, 43, 0.96) !important;
-    border-color: #3b2d66 !important;
-    box-shadow: 0 22px 48px -4px rgba(0, 0, 0, 0.65) !important;
-}
-
-/* Dropdown Item Links */
-a[data-testid="stTopNavDropdownLink"] {
-    display: flex !important;
-    align-items: center !important;
-    padding: 10px 14px !important;
-    margin: 3px 0 !important;
-    border-radius: 12px !important;
-    text-decoration: none !important;
-    color: var(--ink) !important;
-    font-weight: 600 !important;
-    font-size: 0.92rem !important;
-    letter-spacing: -0.01em !important;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    position: relative !important;
-}
-
-a[data-testid="stTopNavDropdownLink"]:hover {
-    background: linear-gradient(135deg, rgba(245, 239, 252, 0.9) 0%, rgba(253, 242, 248, 0.9) 100%) !important;
-    color: #4f46e5 !important;
-    transform: translateX(4px) !important;
-    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.1) !important;
-}
-
-a[data-testid="stTopNavDropdownLink"][aria-current="page"] {
-    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #4338ca 100%) !important;
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35) !important;
-    transform: translateX(4px) scale(1.01) !important;
-}
-
-a[data-testid="stTopNavDropdownLink"][aria-current="page"] span,
-a[data-testid="stTopNavDropdownLink"][aria-current="page"] p,
-a[data-testid="stTopNavDropdownLink"][aria-current="page"] svg {
-    color: #ffffff !important;
-}
-
-[data-theme="dark"] a[data-testid="stTopNavDropdownLink"] {
-    color: #cbd5e1 !important;
-}
-
-[data-theme="dark"] a[data-testid="stTopNavDropdownLink"]:hover {
-    background: #251c50 !important;
-    color: #f8fafc !important;
-    transform: translateX(4px) !important;
-}
-
-[data-theme="dark"] a[data-testid="stTopNavDropdownLink"][aria-current="page"] {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
-    color: #ffffff !important;
-}
-
-/* Individual Top Nav Links */
-a[data-testid="stTopNavLink"] {
-    display: inline-flex !important;
-    align-items: center !important;
-    padding: 5px 14px !important;
-    margin: 0 3px !important;
-    border-radius: 9999px !important;
-    border: 1px solid var(--purple-border) !important;
-    background: rgba(245, 239, 252, 0.75) !important;
-    color: var(--ink-light) !important;
-    font-weight: 700 !important;
-    font-size: 0.88rem !important;
-    text-decoration: none !important;
-    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-a[data-testid="stTopNavLink"]:hover {
-    background: #ffffff !important;
-    color: #4f46e5 !important;
-    border-color: var(--pink-accent) !important;
-    transform: translateY(-1px) !important;
-    box-shadow: 0 4px 14px rgba(244, 114, 182, 0.22) !important;
-}
-
-a[data-testid="stTopNavLink"][aria-current="page"] {
-    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #4338ca 100%) !important;
-    color: #ffffff !important;
-    border-color: transparent !important;
-    box-shadow: 0 4px 16px rgba(79, 70, 229, 0.35) !important;
-}
-
-/* SaaS Badges on Top Dropdown Links */
-a[data-testid="stTopNavDropdownLink"][href*="ats-checker"]::after {
-    content: "AUDIT" !important;
-    margin-left: auto !important;
-    font-size: 0.6rem !important;
-    font-weight: 800 !important;
-    padding: 2px 7px !important;
-    border-radius: 9999px !important;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-    color: #ffffff !important;
-    letter-spacing: 0.05em !important;
-    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3) !important;
-}
-
-a[data-testid="stTopNavDropdownLink"][href*="analyzer"]::after {
-    content: "POPULAR" !important;
-    margin-left: auto !important;
-    font-size: 0.6rem !important;
-    font-weight: 800 !important;
-    padding: 2px 7px !important;
-    border-radius: 9999px !important;
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
-    color: #ffffff !important;
-    letter-spacing: 0.05em !important;
-    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3) !important;
-}
-
-a[data-testid="stTopNavDropdownLink"][href*="ai-coach"]::after {
-    content: "AI PRO" !important;
-    margin-left: auto !important;
-    font-size: 0.6rem !important;
-    font-weight: 800 !important;
-    padding: 2px 7px !important;
-    border-radius: 9999px !important;
-    background: linear-gradient(135deg, #ec4899 0%, #be185d 100%) !important;
-    color: #ffffff !important;
-    letter-spacing: 0.05em !important;
-    box-shadow: 0 2px 6px rgba(236, 72, 153, 0.3) !important;
-}
-
-@media (max-width: 768px) {
-    .top-brand-text { display: none !important; }
-    .top-nav-brand-pill { padding: 4px !important; margin-right: 6px !important; }
-    button[data-testid="stTopNavSection"] { padding: 4px 10px !important; font-size: 0.80rem !important; }
-}
 </style>
 """
 
@@ -2935,10 +2622,10 @@ def inject_cursor_spotlight() -> None:
                         if (!href) return;
 
                         const slug = href.replace(/^(\/|\.\/)/, '').split(/[?#]/)[0];
-                        const targetLink = doc.querySelector('a[data-testid*="Nav"][href*="' + slug + '"], a[href*="' + slug + '"]');
-                        if (targetLink) {
+                        const sidebarLink = doc.querySelector('a[data-testid="stSidebarNavLink"][href*="' + slug + '"]');
+                        if (sidebarLink) {
                             e.preventDefault();
-                            targetLink.click();
+                            sidebarLink.click();
                         }
                     }, false);
 
@@ -3072,56 +2759,6 @@ def inject_theme_toggle() -> None:
                     applyTheme(saved);
                 }
 
-                function updateActiveTopNav() {
-                    try {
-                        const path = (window.parent.location.pathname + window.parent.location.search + window.parent.location.hash).toLowerCase();
-                        const sectionBtns = doc.querySelectorAll('button[data-testid="stTopNavSection"]');
-                        sectionBtns.forEach(btn => {
-                            const text = (btn.textContent || '').toLowerCase();
-                            let isActive = false;
-                            if (text.includes('overview') && (path.endsWith('/') || path.endsWith('/home') || !path.includes('/views/'))) {
-                                isActive = true;
-                            } else if (text.includes('audit') && (path.includes('analyzer') || path.includes('ats') || path.includes('skill-gap'))) {
-                                isActive = true;
-                            } else if (text.includes('strategy') && (path.includes('tracker') || path.includes('roadmap') || path.includes('coach'))) {
-                                isActive = true;
-                            }
-                            if (isActive) {
-                                btn.classList.add('section-active');
-                            } else {
-                                btn.classList.remove('section-active');
-                            }
-                        });
-                    } catch (e) {}
-                }
-
-                // Inject brand pill into top header if not present
-                const header = doc.querySelector('header[data-testid="stHeader"]');
-                if (header && !doc.getElementById('top-nav-brand-pill')) {
-                    const brandPill = doc.createElement('a');
-                    brandPill.id = 'top-nav-brand-pill';
-                    brandPill.className = 'top-nav-brand-pill';
-                    brandPill.href = './';
-                    brandPill.title = 'SkillMatch AI · Home';
-                    brandPill.innerHTML = `
-                        <span class="top-brand-text">SkillMatch <span class="top-brand-badge">AI PRO</span></span>
-                    `;
-                    const collapseBtn = header.querySelector('[data-testid="stSidebarCollapseButton"]');
-                    if (collapseBtn && collapseBtn.nextSibling) {
-                        header.insertBefore(brandPill, collapseBtn.nextSibling);
-                    } else {
-                        header.prepend(brandPill);
-                    }
-                    brandPill.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const homeLink = doc.querySelector('a[data-testid*="Nav"][href*="home"], a[data-testid*="Nav"]');
-                        if (homeLink) homeLink.click();
-                        else window.parent.location.href = './';
-                    });
-                }
-
-                updateActiveTopNav();
-
                 if (!window.parent._themeObserverInit) {
                     window.parent._themeObserverInit = true;
                     const observer = new MutationObserver(function() {
@@ -3136,7 +2773,6 @@ def inject_theme_toggle() -> None:
                                 doc.documentElement.setAttribute('data-theme', 'dark');
                             }
                         }
-                        updateActiveTopNav();
                     });
                     observer.observe(doc.body, { childList: true, subtree: true });
                 }
