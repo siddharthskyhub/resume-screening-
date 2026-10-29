@@ -690,6 +690,39 @@ input[type="text"]:focus, textarea:focus {
     line-height: 1.35;
     margin-top: 3px;
 }
+.brand-slogan-wrap {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 2px;
+    height: 18px;
+}
+.brand-slogan-typing {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 0.81rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--muted);
+    border-right: 2px solid var(--pink-accent, #ec4899);
+    padding-right: 2px;
+    width: 24ch;
+    animation: 
+        slogan-type 6s steps(24, end) infinite,
+        slogan-blink 0.8s step-end infinite;
+}
+[data-theme="dark"] .brand-slogan-typing {
+    color: #cbd5e1;
+}
+@keyframes slogan-type {
+    0% { width: 0; }
+    40%, 75% { width: 24ch; }
+    92%, 100% { width: 0; }
+}
+@keyframes slogan-blink {
+    from, to { border-color: transparent; }
+    50% { border-color: var(--pink-accent, #ec4899); }
+}
 
 /* Sidebar Status Card */
 .sidebar-status-card {

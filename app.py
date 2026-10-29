@@ -40,7 +40,9 @@ with st.sidebar:
         '<span class="brand-text">ResuMate</span>'
         '<span class="brand-pill-ai">AI PRO</span>'
         '</div>'
-        '<div class="brand-sub">Career &amp; Resume Intelligence</div>'
+        '<div class="brand-slogan-wrap">'
+        '<span class="brand-slogan-typing">Get noticed. Get hired.</span>'
+        '</div>'
         '</div>'
         '</div>'
         '</div>',
