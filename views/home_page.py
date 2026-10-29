@@ -54,7 +54,7 @@ with left:
     st.markdown(
         f'<div class="home-hero-badge">{ui.brand_logo(20, inline=True)} Evidence-Based Career Intelligence</div>'
         '<div class="home-title">See which skills your resume actually proves.</div>'
-        '<p class="home-sub">Traditional keyword matchers give false confidence. SkillMatch identifies whether '
+        '<p class="home-sub">Traditional keyword matchers give false confidence. ResuMate identifies whether '
         'required skills are proven by quantifiable projects, merely listed, or missing entirely — then helps you close the gaps.</p>',
         unsafe_allow_html=True,
     )
@@ -83,7 +83,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown("### How to Use SkillMatch AI")
+st.markdown("### How to Use ResuMate AI")
 st.markdown(
     '<p style="color:var(--muted); margin-top:-6px; margin-bottom:18px;">A comprehensive, evidence-based system to optimize and organize your job search.</p>',
     unsafe_allow_html=True,

@@ -6,7 +6,7 @@ import ui
 importlib.reload(ui)
 
 st.set_page_config(
-    page_title="SkillMatch AI · Evidence-Based Resume Matching",
+    page_title="ResuMate AI · Precision Resume & Career Intelligence",
     page_icon=":material/track_changes:",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -37,10 +37,10 @@ with st.sidebar:
         f'<div class="brand-logo-wrap">{ui.brand_logo(42)}</div>'
         '<div>'
         '<div class="brand-title-row">'
-        '<span class="brand-text">SkillMatch</span>'
+        '<span class="brand-text">ResuMate</span>'
         '<span class="brand-pill-ai">AI PRO</span>'
         '</div>'
-        '<div class="brand-sub">Career &amp; Skill Intelligence</div>'
+        '<div class="brand-sub">Career &amp; Resume Intelligence</div>'
         '</div>'
         '</div>'
         '</div>',
@@ -102,7 +102,7 @@ navigation.run()
 st.divider()
 st.markdown(
     '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:0.86rem; color:var(--muted);">'
-    '<span>SkillMatch AI · Evidence-Based Resume & Skill Gap Optimization</span>'
+    '<span>ResuMate AI · Evidence-Based Resume & Career Intelligence</span>'
     '<span>Portfolio Project by Siddharth Kumar</span>'
     '</div>',
     unsafe_allow_html=True,
