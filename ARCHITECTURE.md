@@ -1,9 +1,9 @@
 # ResuMate AI — System Architecture & Technical Specification
 
 > **Platform**: ResuMate AI (formerly SkillMatch AI)  
-> **Type**: Privacy-First, Evidence-Based Career Intelligence & ATS Optimization Platform  
+> **Type**: Privacy-First, Evidence-Based Career Intelligence, Hybrid RAG & ATS Optimization Platform  
 > **Version**: 2.0.0  
-> **Runtime**: Python 3.10+ / Streamlit 1.50+ / SQLite3 / Optional Local Ollama
+> **Runtime**: Python 3.10+ / Streamlit 1.50+ / SQLite3 / Optional Local Ollama (Llama 3.2 + nomic-embed-text)
 
 ---
 
@@ -15,8 +15,9 @@ ResuMate AI is an evidence-backed career companion engineered to bridge the gap 
 
 1. **Privacy-First & Zero-Cloud Ingestion**: Resumes are parsed directly in volatile memory and never persisted to disk or transmitted to third-party cloud servers.
 2. **Deterministic Ground Truth**: All matching scores, ATS compliance metrics, and gap analyses are calculated through deterministic algorithms with unit-test guarantees.
-3. **Guardrailed Local AI**: Generative AI features (bullet rewrites, semantic synthesis) run strictly through local LLMs ([Ollama](https://ollama.com)) and pass through automated fact-checking engines that prevent hallucinations.
-4. **Decoupled Architecture**: Pure computational engines (`analyzer.py`, `ats_checker.py`, `gaps.py`, `roadmap.py`) have zero Streamlit dependencies, ensuring complete testability and CLI/API portability.
+3. **Hybrid RAG & Semantic Retrieval**: Combines dense vector embeddings (`nomic-embed-text`) with sparse lexical matching (Okapi BM25 heuristics) fused via Reciprocal Rank Fusion (RRF).
+4. **Guardrailed Local AI**: Generative AI features (bullet rewrites, semantic synthesis) run strictly through local LLMs ([Ollama](https://ollama.com)) and pass through automated fact-checking engines that prevent hallucinations.
+5. **Decoupled Architecture**: Pure computational engines (`analyzer.py`, `ats_checker.py`, `gaps.py`, `roadmap.py`) have zero Streamlit dependencies, ensuring complete testability and CLI/API portability.
 
 ---
 
@@ -52,8 +53,8 @@ flowchart TD
         RoadmapEng["roadmap.py (DAG Prerequisite & Project Generator)"]
     end
 
-    subgraph AISubsystem["Local AI & Guardrail Engine (Optional)"]
-        AIEng["ai.py (Ollama Client)"]
+    subgraph AISubsystem["Local Hybrid RAG & Guardrail Subsystem"]
+        AIEng["ai.py (Ollama Client & Vector Embedding Engine)"]
         FactChecker["Fact-Checking & Anti-Hallucination Guard"]
         OllamaServer["Local Ollama Daemon (llama3.2 / nomic-embed)"]
     end
@@ -93,7 +94,67 @@ flowchart TD
 
 ---
 
-## 3. End-to-End Data Flow Pipeline
+## 3. Hybrid RAG & Guardrailed LLM Pipeline
+
+ResuMate AI incorporates a complete **Hybrid Retrieval-Augmented Generation (Hybrid RAG)** architecture ensuring that candidates receive credit for both verbatim technical terms and conceptually related experience:
+
+```mermaid
+flowchart TD
+    Query["User Query / Candidate Resume & Target Job Description"]
+    
+    Query --> Dense["Dense Vector Search (nomic-embed-text)"]
+    Query --> Sparse["Sparse BM25 Search (Okapi BM25 & Evidence Matcher)"]
+    
+    Dense --> RankedDense["Ranked Dense Chunks"]
+    Sparse --> RankedSparse["Ranked Sparse Chunks"]
+    
+    RankedDense --> RRF["Reciprocal Rank Fusion (RRF)"]
+    RankedSparse --> RRF
+    
+    RRF --> TopK["Top-K Scored Evidence Chunks"]
+    
+    TopK --> PromptBuilder["Strict Grounding Prompt Builder (Chunk IDs + Refusal Policy)"]
+    
+    PromptBuilder --> Ollama["Ollama LLM (Llama 3.2 Context-Grounded Answer)"]
+    
+    Ollama --> Guardrail["Anti-Hallucination Guardrail (Citation & Fact Verifier)"]
+    
+    Guardrail --> Dashboard["Interactive Web Dashboard (Streamlit 1.50+)"]
+```
+
+### 1. Dual-Path Retrieval
+- **Dense Vector Retrieval (`nomic-embed-text`)**: Generates 768-dimensional embeddings for both parsed resume bullet chunks and target job requirement sentences. Cosine similarity surfaces semantic alignments that lack exact keyword matches (e.g. *"developed scalable event-driven workers"* $\leftrightarrow$ *"RabbitMQ message queuing"*).
+- **Sparse BM25 & Lexical Matcher**: Evaluates exact technical keywords, tool names, and evidence categories (*Strong*, *Demonstrated*, *Listed Only*) using frequency analysis and section heuristics.
+
+### 2. Reciprocal Rank Fusion (RRF)
+To unify dense semantic and sparse lexical signals, candidate evidence chunks are merged via Reciprocal Rank Fusion:
+
+$$RRF(d) = \frac{\alpha}{k + r_{\text{dense}}(d)} + \frac{1 - \alpha}{k + r_{\text{sparse}}(d)}$$
+
+Where:
+- $r_{\text{dense}}(d)$ is the rank position in the semantic vector search.
+- $r_{\text{sparse}}(d)$ is the rank position in the lexical/evidence matcher.
+- $k = 60$ is the standard smoothing constant preventing high-rank domination.
+- $\alpha \in [0, 1]$ balances semantic similarity against exact lexical presence.
+
+### 3. Strict Grounding Prompt Builder
+The Top-K fused evidence chunks are formatted with explicit reference boundaries:
+- Enforces an explicit **refusal policy** (`REWRITE_SYSTEM`, `SUMMARY_SYSTEM`).
+- Prohibits the LLM from fabricating unverified metrics, new tools, or unmentioned employers.
+- Inserts candidate placeholders (e.g., `[X%]` or `[number of users]`) when measurable impact is missing rather than inventing fictional data.
+
+### 4. Local LLM Generation (`Llama 3.2`)
+Inference executes strictly on-device through Ollama (`http://localhost:11434`), generating context-grounded bullet rewrites, fit summaries, and role-specific interview prep.
+
+### 5. Anti-Hallucination Guardrail & Citation Verifier
+Before any LLM-generated text reaches the user interface, it passes through an automated validation gate in [`ai.py`](ai.py):
+- **Metric Verification**: Compares extracted numerical metrics against the original bullet. Any invented number causes an immediate rejection and regeneration.
+- **Skill Verification**: Scans generated text for technical skills not present in the source facts.
+- **Sentence Faithfulness Score**: Rejects responses exceeding acceptable token drift.
+
+---
+
+## 4. End-to-End Data Flow Pipeline
 
 ```mermaid
 sequenceDiagram
@@ -116,9 +177,9 @@ sequenceDiagram
     Core->>Core: Compute Keyword %, Evidence %, ATS Score
     Core-->>UI: Interactive Cards, Score Gauges & Skill Chips
 
-    opt AI Enhancement Requested (e.g. Bullet Rewriting)
+    opt AI Enhancement Requested (e.g. Bullet Rewriting via RAG)
         User->>UI: Request AI Bullet Optimization
-        UI->>Ollama: Generate Rewritten Bullet
+        UI->>Ollama: Generate Rewritten Bullet with Top-K Grounding
         Ollama-->>Guard: Raw Generated Bullet
         Guard->>Core: Verify against extracted facts (metrics, skills, action verbs)
         alt Passed Verification
@@ -137,7 +198,7 @@ sequenceDiagram
 
 ---
 
-## 4. Module Decomposition & Responsibilities
+## 5. Module Decomposition & Responsibilities
 
 | Layer / Module | Primary File | Core Responsibilities & Algorithms | External Dependencies |
 | :--- | :--- | :--- | :--- |
@@ -148,11 +209,11 @@ sequenceDiagram
 | **Skill Gap Analyzer** | [`gaps.py`](file:///c:/Users/Siddharth%20kumar/Documents/resume-job-matching-04/gaps.py) | Aggregates skill deficits across up to 10 job descriptions, computes frequency weights, outputs heatmap matrices. | Pure Python |
 | **Roadmap Planner** | [`roadmap.py`](file:///c:/Users/Siddharth%20kumar/Documents/resume-job-matching-04/roadmap.py) | Directed acyclic graph (DAG) of technical competencies, prerequisite scheduling, hands-on portfolio project templates. | Pure Python |
 | **Application Tracker** | [`tracker.py`](file:///c:/Users/Siddharth%20kumar/Documents/resume-job-matching-04/tracker.py) | SQLite-backed job application pipeline (Saved $\rightarrow$ Applied $\rightarrow$ Interviewing $\rightarrow$ Offer $\rightarrow$ Rejected $\rightarrow$ Archived). | `sqlite3` |
-| **Local AI Engine** | [`ai.py`](file:///c:/Users/Siddharth%20kumar/Documents/resume-job-matching-04/ai.py) | Ollama HTTP client (`llama3.2`, `nomic-embed-text`), deterministic hallucination verification, cosine similarity semantic matching. | `urllib` / Ollama API |
+| **Local AI & RAG Engine** | [`ai.py`](file:///c:/Users/Siddharth%20kumar/Documents/resume-job-matching-04/ai.py) | Ollama HTTP client (`llama3.2`, `nomic-embed-text`), dense embeddings, cosine similarity, deterministic hallucination verification. | `urllib` / Ollama API |
 
 ---
 
-## 5. Evidence-Based Scoring Algorithm
+## 6. Evidence-Based Scoring Algorithm
 
 Rather than counting simple string occurrences, ResuMate implements a tripartite evidence classification model:
 
@@ -178,25 +239,6 @@ flowchart TD
 Given required skills set $R$ and nice-to-have skills set $N$, where each skill $s$ has evidence weight $w(s) \in \{0.0, 0.25, 0.65, 1.0\}$:
 
 $$\text{Evidence Score} = \frac{0.75 \sum_{s \in R} w(s) + 0.25 \sum_{s \in N} w(s)}{0.75 |R| + 0.25 |N|} \times 100$$
-
----
-
-## 6. Anti-Hallucination AI Guardrail Architecture
-
-ResuMate guarantees that generative AI outputs never corrupt candidate truthfulness. Every suggestion produced by the local LLM is filtered through [`ai.py`](file:///c:/Users/Siddharth%20kumar/Documents/resume-job-matching-04/ai.py) before display:
-
-```mermaid
-flowchart LR
-    Prompt["Candidate Bullet + Context"] --> LLM["Local Ollama (llama3.2)"]
-    LLM --> Generated["Proposed Rewritten Bullet"]
-    
-    Generated --> V1{"Metric Validator"}
-    V1 -- "New unproven number detected" --> Flag1["Flag: Fabricated Metric"]
-    V1 -- "Metrics match original" --> V2{"Skill Validator"}
-    
-    V2 -- "Unproven technology injected" --> Flag2["Flag: Unverified Skill"]
-    V2 -- "All skills verified" --> Safe["Approved & Displayed"]
-```
 
 ---
 
