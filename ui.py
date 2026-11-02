@@ -656,8 +656,12 @@ input[type="text"]:focus, textarea:focus {
 }
 .brand-logo-svg {
     border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.22);
+    box-shadow: 0 4px 16px -2px rgba(124, 58, 237, 0.28), 0 2px 6px -1px rgba(0, 0, 0, 0.12);
     display: block;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.brand-logo-wrap:hover .brand-logo-svg {
+    box-shadow: 0 8px 24px -2px rgba(168, 85, 247, 0.42), 0 3px 8px -1px rgba(0, 0, 0, 0.2);
 }
 .brand-title-row {
     display: flex;
@@ -2063,6 +2067,13 @@ body[data-theme="dark"],
     box-shadow: 0 8px 18px -2px rgba(124, 58, 237, 0.5) !important;
 }
 
+[data-theme="dark"] .brand-logo-svg {
+    box-shadow: 0 6px 20px -2px rgba(192, 132, 252, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] .brand-logo-wrap:hover .brand-logo-svg {
+    box-shadow: 0 8px 26px -2px rgba(236, 72, 153, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
 [data-theme="dark"] .brand-text {
     background: linear-gradient(135deg, #ffffff 0%, #c084fc 100%);
     -webkit-background-clip: text;
@@ -2504,42 +2515,49 @@ def brand_logo(size: int = 42, inline: bool = False, class_name: str = "") -> st
         f'style="{inline_style}" aria-label="ResuMate AI Logo" xmlns="http://www.w3.org/2000/svg">'
         f'<defs>'
         f'<linearGradient id="bg_{uid}" x1="0%" y1="0%" x2="100%" y2="100%">'
-        f'<stop offset="0%" stop-color="#070a1e"/>'
-        f'<stop offset="50%" stop-color="#0a0e28"/>'
-        f'<stop offset="100%" stop-color="#0e1336"/>'
+        f'<stop offset="0%" stop-color="#070a22"/>'
+        f'<stop offset="50%" stop-color="#0b1030"/>'
+        f'<stop offset="100%" stop-color="#0f153d"/>'
         f'</linearGradient>'
         f'<linearGradient id="stem_{uid}" x1="0%" y1="100%" x2="0%" y2="0%">'
-        f'<stop offset="0%" stop-color="#4338ca"/>'
-        f'<stop offset="45%" stop-color="#7c3aed"/>'
-        f'<stop offset="100%" stop-color="#9333ea"/>'
+        f'<stop offset="0%" stop-color="#4f46e5"/>'
+        f'<stop offset="50%" stop-color="#7c3aed"/>'
+        f'<stop offset="100%" stop-color="#a855f7"/>'
         f'</linearGradient>'
-        f'<linearGradient id="top_{uid}" x1="10%" y1="90%" x2="90%" y2="10%">'
-        f'<stop offset="0%" stop-color="#a855f7"/>'
+        f'<linearGradient id="loop_{uid}" x1="0%" y1="100%" x2="100%" y2="0%">'
+        f'<stop offset="0%" stop-color="#8b5cf6"/>'
         f'<stop offset="35%" stop-color="#c084fc"/>'
-        f'<stop offset="70%" stop-color="#f472b6"/>'
-        f'<stop offset="95%" stop-color="#ffffff"/>'
+        f'<stop offset="70%" stop-color="#e879f9"/>'
+        f'<stop offset="95%" stop-color="#f472b6"/>'
+        f'<stop offset="100%" stop-color="#ffffff"/>'
         f'</linearGradient>'
         f'<linearGradient id="facet_{uid}" x1="0%" y1="0%" x2="100%" y2="100%">'
-        f'<stop offset="0%" stop-color="#e879f9"/>'
+        f'<stop offset="0%" stop-color="#ffffff"/>'
+        f'<stop offset="30%" stop-color="#fbcfe8"/>'
         f'<stop offset="100%" stop-color="#f472b6"/>'
         f'</linearGradient>'
         f'<linearGradient id="leg_{uid}" x1="0%" y1="0%" x2="100%" y2="100%">'
-        f'<stop offset="0%" stop-color="#f472b6"/>'
-        f'<stop offset="50%" stop-color="#fb7185"/>'
-        f'<stop offset="100%" stop-color="#fda4af"/>'
+        f'<stop offset="0%" stop-color="#ec4899"/>'
+        f'<stop offset="50%" stop-color="#f43f5e"/>'
+        f'<stop offset="100%" stop-color="#fb7185"/>'
         f'</linearGradient>'
-        f'<filter id="drop_{uid}" x="-20%" y="-20%" width="140%" height="140%">'
-        f'<feDropShadow dx="-1" dy="3" stdDeviation="2.5" flood-color="#040612" flood-opacity="0.55"/>'
+        f'<linearGradient id="leg_bevel_{uid}" x1="100%" y1="0%" x2="0%" y2="100%">'
+        f'<stop offset="0%" stop-color="#be185d"/>'
+        f'<stop offset="100%" stop-color="#ec4899"/>'
+        f'</linearGradient>'
+        f'<filter id="shadow_{uid}" x="-20%" y="-20%" width="140%" height="140%">'
+        f'<feDropShadow dx="-1.5" dy="3.5" stdDeviation="2.5" flood-color="#02030a" flood-opacity="0.65"/>'
         f'</filter>'
         f'</defs>'
         f'<rect width="100" height="100" rx="26" fill="url(#bg_{uid})"/>'
-        f'<rect width="98" height="98" x="1" y="1" rx="25" fill="none" stroke="rgba(255,255,255,0.09)" stroke-width="1.2"/>'
+        f'<rect width="98" height="98" x="1" y="1" rx="25" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>'
         f'<g>'
         f'<rect x="22" y="20" width="14" height="60" rx="7" fill="url(#stem_{uid})"/>'
-        f'<path d="M30,20 C48,20 62,20 71,28 C78,34 78,44 71,50 C65,55 52,55 34,55 L34,42 C48,42 63,42 63,35 C63,29 50,29 34,29 L30,29 Z" fill="url(#top_{uid})"/>'
-        f'<path d="M58,20 L76,33 L62,35 Z" fill="url(#facet_{uid})" opacity="0.9"/>'
-        f'<path d="M43,49 L57,49 L76,74 C78,77 76,80 72,80 L58,80 C55,80 52,78 50,75 L37,56 Z" fill="url(#leg_{uid})" filter="url(#drop_{uid})"/>'
-        f'<line x1="57" y1="49" x2="76" y2="74" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>'
+        f'<path d="M30,20 C48,20 74,20 74,36.5 C74,50 54,51.5 36,51.5 L36,38 C47,38 58,38 58,36 C58,33 47,33 30,33 Z" fill="url(#loop_{uid})"/>'
+        f'<path d="M57,20 L74,32 L60.5,35.5 Z" fill="url(#facet_{uid})" opacity="0.95"/>'
+        f'<path d="M43,47 C48,47 54,48 57,51 L75,73.5 C77.5,76.5 75.5,79.5 71.5,79.5 L59,79.5 C56,79.5 53.5,78 51.5,75 L37.5,55 Z" fill="url(#leg_{uid})" filter="url(#shadow_{uid})"/>'
+        f'<polygon points="59,79.5 71.5,79.5 75,73.5 64.5,73.5" fill="url(#leg_bevel_{uid})"/>'
+        f'<path d="M33,21.5 C45,21.5 59,22 67,26.5" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.75"/>'
         f'</g>'
         f'</svg>'
     )
